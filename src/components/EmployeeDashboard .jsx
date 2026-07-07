@@ -55,7 +55,7 @@ const EmployeeDashboard = () => {
         try {
             // await axiosInstance.post("/attendance/checkin");
             const res = await axiosInstance.post("/attendance/checkin");
-            console.log(res)
+            // console.log(res)
             await fetchStats();
         } catch (err) {
             setError(err?.response?.data?.message || "Check-in failed");
