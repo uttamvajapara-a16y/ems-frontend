@@ -6,6 +6,7 @@ import Dashboard from "./Dahsboard";
 import EmployeeDashboard from "./EmployeeDashboard "
 import MyAttendance from "./MyAttendance ";
 import MyLeaves from "./MyLeaves";
+import LeaveForm from "./LeaveForm";
 
 export {
     Body,
@@ -15,5 +16,6 @@ export {
     Dashboard,
     EmployeeDashboard,
     MyAttendance,
-    MyLeaves
+    MyLeaves,
+    LeaveForm
 }

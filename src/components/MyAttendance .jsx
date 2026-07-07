@@ -12,7 +12,6 @@ const statusBadge = {
     present: "bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20",
     absent: "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/20",
     "half-day": "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20",
-    leave: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700",
 };
 
 const monthNames = [
@@ -184,11 +183,14 @@ const MyAttendance = () => {
                                                     {r.workingHours ? `${r.workingHours}h` : "—"}
                                                 </td>
                                                 <td className="px-5 py-3">
-                                                    <span
+                                                    {
+                                                        r.status && 
+                                                        <span
                                                         className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full border capitalize ${statusBadge[r.status]}`}
                                                     >
                                                         {r.status}
                                                     </span>
+                                                    }
                                                 </td>
                                             </tr>
                                         ))}

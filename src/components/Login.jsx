@@ -23,14 +23,10 @@ const Login = () => {
 
         try{
             const res = await axiosInstance.post("/login" , {emailId, password, role}) ;
-            console.log(res) ;
+            // console.log(res) ;
             dispatch(addUser(res.data)) ;
             navigate("/dashboard") ;
         } catch (error){
-            // console.log("Full error:", error);
-            // console.log("Response data:", error?.response?.data);
-            // console.log("Status:", error?.response?.status);
-            // setError(error?.response?.data?.message || error?.response?.data || "Something went wrong");
             setError(error?.response?.data?.message || "Something went wrong");
             console.log("Error in handlelogin : " + error);
         } finally{
