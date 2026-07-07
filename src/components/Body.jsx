@@ -9,32 +9,37 @@ import { addUser } from '../utils/userSlice'
 
 const Body = () => {
 
-  const user = useSelector((store) => store.user) ;
-  const dispatch = useDispatch() ;
-  const navigate = useNavigate() ;
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const fetchUser = async () => {
-  //   if(user) return ;
-  //   try{
-  //     const res = await axiosInstance.get("/profile/view") ;
-  //     console.log(res) ;
-  //     dispatch(addUser(res.data)) ;
-  //   } catch (err){
-  //     if(err.response?.status === 401){
-  //       navigate("/login") ;
-  //     }
-  //     console.log("error in fetching user data: " + err.message) ;
-  //   }
-  // }
+  const fetchUser = async () => {
+    if(user) {
+      navigate("/dashboard")
+      return 
+    } ;
+    try{
+      const res = await axiosInstance.get("/profile/view") ;
+      // console.log(res) ;
+      dispatch(addUser(res.data)) ;
+    } catch (err){
+      if(err.response?.status === 401){
+        navigate("/login") ;
+      }
+      console.log("error in fetching user data: " + err.message) ;
+    }
+  }
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, [user]) ;
+  useEffect(() => {
+    fetchUser();
+  }, [user]) ;
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
       <Navbar />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   )

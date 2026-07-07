@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axiosInstance from "../utils/axiosInstance";
+import { removeUser } from "../utils/userSlice";
 import {
   LayoutDashboard,
   Users,
@@ -12,10 +14,11 @@ import {
   LogOut,
   Menu,
   X,
-  Key,
+  Moon,
+  Sun,
 } from "lucide-react";
 
-
+// role -> nav links config, single source of truth
 const NAV_LINKS = {
   admin: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -41,32 +44,46 @@ const NAV_LINKS = {
 };
 
 const Navbar = () => {
-
   const user = useSelector((store) => store.user);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.classList.contains("dark")
+  );
 
-  const [mobileOpen, setMobileOpen] = useState(true);
-
-  // const role = user?.role?.toLoweeCase() ;
-  const role = "admin";
+  const role = user?.role?.toLowerCase();
   const links = NAV_LINKS[role] || [];
 
-  // if(!user) return null ;
+  const toggleTheme = () => {
+    const nowDark = document.documentElement.classList.toggle("dark");
+    setIsDark(nowDark);
+    localStorage.setItem("theme", nowDark ? "dark" : "light");
+  };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login");
-  }
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/logout");
+    } catch (err) {
+      console.log("Logout error:", err.message);
+    } finally {
+      dispatch(removeUser());
+      navigate("/login");
+    }
+  };
+
+  if (!user) return null;
 
   return (
-    <nav className="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+    <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-
           {/* logo */}
-          <Link to="/dashboard" className="flex items-center gap-2 font-semibold text-lg tracking-tight">
-            <div className="w-8 h-8 rounded-md bg-indigo-500 flex items-center justify-center text-sm font-bold">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 font-semibold text-lg tracking-tight text-slate-900 dark:text-white -ml-20"
+          >
+            <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center text-sm font-bold text-white">
               EMS
             </div>
             <span className="hidden sm:block">Employee Portal</span>
@@ -74,76 +91,96 @@ const Navbar = () => {
 
           {/* desktop links */}
           <div className="hidden md:flex items-center gap-1">
-            {
-              links.map(({ to, label, icon: Icon }) => (
-                <Link
-                  to={to} key={to}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-                >
-                  <Icon size={16} />
-                  {label}
-                </Link>
-              ))
-            }
+            {links.map(({ to, label, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <Icon size={16} />
+                {label}
+              </Link>
+            ))}
           </div>
 
-          {/* profile + logout */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link to="/profile" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-medium">
-                {user?.firstName?.[0].toUpperCase() || "U"}
+          {/* right side: theme toggle + profile + logout */}
+          <div className="hidden md:flex items-center gap-3 -mr-25">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="Toggle theme"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <Link to="/profile" className="flex items-center gap-2 group pl-2">
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-medium text-white">
+                {user.firstName?.[0]?.toUpperCase() || "U"}
               </div>
               <div className="text-sm leading-tight">
-                <p className="font-medium group-hover:text-indigo-300 transition-colors">
-                  fistName lastName
+                <p className="font-medium text-slate-800 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  {user.firstName} {user.lastName}
                 </p>
-                <p className="text-xs text-slate-400 capitalize">{role}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 capitalize">{role}-({user?.departmentId?.departmentName})</p>
               </div>
             </Link>
+
             <button
-              className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-slate-300 hover:text-white hover:bg-red-500/20 hover:text-red-300 transition-colors"
               onClick={handleLogout}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-slate-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             >
               <LogOut size={16} />
               Logout
             </button>
           </div>
+
           {/* mobile menu toggle */}
           <button
-            className="md:hidden text-slate-300"
+            className="md:hidden text-slate-600 dark:text-slate-300"
             onClick={() => setMobileOpen((prev) => !prev)}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
-      
+
       {/* mobile dropdown */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-slate-800 px-4 pb-4 pt-2 space-y-1">
+        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 px-4 pb-4 pt-2 space-y-1 bg-white dark:bg-slate-900">
           {links.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-white"
             >
               <Icon size={16} />
               {label}
             </Link>
           ))}
-          <div className="border-t border-slate-800 my-2" />
+
+          <div className="border-t border-slate-200 dark:border-slate-800 my-2" />
+
           <Link
             to="/profile"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+            className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <Users size={16} />
-            Profile ({user?.firstName})
+            Profile ({user.firstName})
           </Link>
+
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            {isDark ? "Light mode" : "Dark mode"}
+          </button>
+
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-red-300 hover:bg-red-500/20"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
           >
             <LogOut size={16} />
             Logout
@@ -151,7 +188,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
