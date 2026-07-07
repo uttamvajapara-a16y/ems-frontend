@@ -23,7 +23,7 @@ const Login = () => {
 
         try{
             const res = await axiosInstance.post("/login" , {emailId, password, role}) ;
-            // console.log(res) ;
+            console.log(res) ;
             dispatch(addUser(res.data)) ;
             navigate("/dashboard") ;
         } catch (error){
