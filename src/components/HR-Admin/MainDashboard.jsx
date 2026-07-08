@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../../utils/axiosInstance";
 import {
     Users,
     UserCog,
@@ -17,8 +17,10 @@ import {
     LogOut,
     CheckCircle2
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const MainDashboard = () => {
+    const user = useSelector((store) => store.user) ;
     const [stats, setStats] = useState(null);
     const [attendance, setAttendance] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -72,13 +74,13 @@ const MainDashboard = () => {
         }
     };
 
-    useEffect(() => {   
+    useEffect(() => {
         fetchStats();
     }, []);
 
     useEffect(() => {
         fetchStatsAttendence();
-    }, []) ;
+    }, []);
 
     if (loading) {
         return (
@@ -117,14 +119,23 @@ const MainDashboard = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
             {/* header */}
-            <div>
-                <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">HR Dashboard</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Overview of your organization's workforce today.
-                </p>
+            <div className="flex justify-between">
+                <div>
+                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">HR Dashboard</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        Overview of your organization's workforce today.
+                    </p>
+                </div>
+
+                <Link
+                    to="/attendance/report"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-1 rounded-lg bg-indigo-600 text-white text-sm font-medium shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:shadow-none dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700 dark:shadow-indigo-500/20 transition-colors duration-150"
+                >
+                    Attendance Report
+                </Link>
             </div>
 
-             {/* check-in/out widget */}
+            {/* check-in/out widget */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
@@ -220,7 +231,7 @@ const MainDashboard = () => {
                 </div>
 
                 <Link
-                    to="/leaves"
+                    to="/leaves/approve"
                     className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors"
                 >
                     <div className="flex items-center justify-between mb-2">
@@ -279,7 +290,7 @@ const MainDashboard = () => {
                             <Clock3 className="text-slate-400" size={18} />
                             <h2 className="text-base font-semibold text-slate-900 dark:text-white">Recent Leave Requests</h2>
                         </div>
-                        <Link to="/leaves" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                        <Link to="/leaves/approve" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
                             View all
                         </Link>
                     </div>

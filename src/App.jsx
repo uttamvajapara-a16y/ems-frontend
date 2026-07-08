@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Body, Dashboard, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile } from './components'
+import { ApproveLeave, AttendanceReport, Body, Dashboard, EmployeeList, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile } from './components'
 import { Provider } from 'react-redux'
 import store from './utils/appStrore' ;
 
@@ -16,11 +16,13 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/dashboard' element={<Dashboard />}/>
               <Route path="/attendance" element={<MyAttendance />} />
-              <Route path="/attendance" element={<MyAttendance />} />
+              <Route path="/attendance/report" element={<AttendanceReport />} />
               <Route path="/leaves" element={<MyLeaves />} />
               <Route path="/leaves/apply" element={<LeaveForm />} />
               <Route path="/payslips" element={<Payslips />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/employees" element={<EmployeeList />} />
+              <Route path="/leaves/approve" element={<ApproveLeave />} />
             </Route>
           </Routes>
         </BrowserRouter>
