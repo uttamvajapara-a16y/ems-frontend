@@ -36,6 +36,7 @@ const EmployeeDashboard = () => {
     const [error, setError] = useState("");
 
     const fetchStats = async () => {
+        setLoading(true);
         try {
             const res = await axiosInstance.get("/employee/dashboard/employee-stats");
             setStats(res.data.data);
@@ -85,21 +86,19 @@ const EmployeeDashboard = () => {
         );
     }
 
-    const {
-        checkedInToday,
-        checkedOutToday,
-        monthlyAttendance,
-        recentLeaves,
-        latestPayslip,
-    } = stats || {};
-
-    const presentDays = monthlyAttendance?.presentDays || 0;
-    const absentDays = monthlyAttendance?.absentDays || 0;
-    const totalMarked = monthlyAttendance?.totalMarked || 0;
-    const attendancePct = totalMarked ? Math.round((presentDays / totalMarked) * 100) : 0;
-
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+            {loading && (
+                <div className="min-h-[60vh] flex items-center justify-center">
+                    <Loader2 className="animate-spin text-indigo-500" size={28} />
+                </div>
+            )}
+            {!loading && (() => {
+                const { checkedInToday, checkedOutToday, monthlyAttendance, recentLeaves, latestPayslip } = stats || {};
+                const presentDays = monthlyAttendance?.presentDays || 0;
+                const absentDays = monthlyAttendance?.absentDays || 0;
+                const totalMarked = monthlyAttendance?.totalMarked || 0;
+                const attendancePct = totalMarked ? Math.round((presentDays / totalMarked) * 100) : 0;
             {/* header */}
             <div>
                 <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">My Dashboard</h1>
@@ -277,6 +276,7 @@ const EmployeeDashboard = () => {
                     </div>
                 )}
             </div>
+            })()}
         </div>
     );
 };

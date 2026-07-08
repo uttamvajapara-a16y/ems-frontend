@@ -9,7 +9,7 @@ const Login = () => {
     // const [emailId, setEmailId] = useState("admin2@gmail.com");
     const [password, setPassword] = useState("Uttam@124");
     // const [password, setPassword] = useState("Admin2@124");
-    const [role, setRole] = useState("Employee");
+    const [role, setRole] = useState("HR");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 

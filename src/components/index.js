@@ -9,6 +9,8 @@ import MyLeaves from "./MyLeaves";
 import LeaveForm from "./LeaveForm";
 import Payslips from "./Payslips";
 import Profile from "./Profile" ;
+import Menubar from "./Menubar" ;
+import MainDashboard from "./MainDashboard";
 
 export {
     Body,
@@ -22,4 +24,6 @@ export {
     LeaveForm,
     Payslips,
     Profile,
+    Menubar,
+    MainDashboard,
 }

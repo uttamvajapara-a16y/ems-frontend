@@ -31,7 +31,7 @@ const NAV_LINKS = {
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/employees", label: "Employees", icon: Users },
     { to: "/leaves", label: "Leaves", icon: Calendar },
-    { to: "/payroll", label: "Payroll", icon: Wallet },
+    { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/attendance", label: "Attendance", icon: ClipboardList },
   ],
   employee: [
