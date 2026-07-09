@@ -45,15 +45,15 @@ const GeneratePayroll = () => {
 
   const [hrEmployees, setHrEmployees] = useState([]);
   const [loadingEmp, setLoadingEmp] = useState(true);
-  const [deptData , setDeptData] = useState([]) ;
+  const [hrData, setHrData] = useState([]);
 
   const fetchPayrolls = async () => {
     setLoadingList(true);
     try {
       const res = await axiosInstance.get("/payroll");
-      const deptres = await axiosInstance.get("/department/get/all") ;
+      const hrRes = await axiosInstance.get("/hr/getHr");
       setPayrolls(res.data.data);
-      setDeptData(deptres.data.data) ;
+      setHrData(hrRes.data.data);
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load payroll records");
     } finally {
@@ -63,7 +63,7 @@ const GeneratePayroll = () => {
 
   const fetchHrEmployees = async () => {
     try {
-      const roleDept = user?.role === "HR" ? (user?.departmentId?.departmentName) : "" ;
+      const roleDept = user?.role === "HR" ? (user?.departmentName) : "";
       const res = await axiosInstance.get(`/employees?department=${roleDept}`);
       // console.log(res) ;
       setHrEmployees(res.data.data);
@@ -80,7 +80,7 @@ const GeneratePayroll = () => {
 
   useEffect(() => {
     fetchHrEmployees();
-  }, [user]);
+  }, []);
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -204,34 +204,48 @@ const GeneratePayroll = () => {
                   <Loader2 className="animate-spin text-indigo-500" size={15} />
                 </div>
               ) : hrEmployees === undefined || hrEmployees.length === 0 ? (
-                <p className="text-center text-sm text-slate-400 dark:text-slate-500 py-1">No employee found records yet</p>
+                <p className="text-center text-sm text-slate-400 dark:text-slate-500 py-1">No employee found</p>
               ) : (
                 <>
                   <select
                     name="emp"
                     id="emp"
                     onChange={(e) => {
-                      const selectedId = e.target.value ;
+                      const selectedId = e.target.value;
                       console.log(selectedId)
-                      if(selectedId === "ALL"){
+                      if (selectedId === "ALL") {
                         setEmployeeId("")
                         setBasicSalary("")
-                        return ;
+                        return;
                       }
-                      const selectedEmp = hrEmployees.find((emp) => emp._id = selectedId) ;
-                      if(selectedEmp){
-                        setBasicSalary(selectedEmp.salary) ;
-                        setEmployeeId(selectedEmp._id) ;
+                      const selectedEmp = hrEmployees.find((emp) => emp._id === selectedId);
+                      if (selectedEmp) {
+                        setBasicSalary(selectedEmp.salary);
+                        setEmployeeId(selectedEmp._id);
                       }
                     }}
                     className="w-full px-10 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                   >
-                    <option value="ALL">ALL EMPLOYEES</option>
-                    {hrEmployees.map((emp) => (
-                      <option key={emp._id} value={emp._id}>
-                        {emp.firstName} {emp.lastName}
-                      </option>
-                    ))}
+                    {target === "hr" ? (
+                      <>
+                        <option value="ALL">ALL HRS</option>
+                        {hrData.map((emp) => (
+                          <option key={emp._id} value={emp._id}>
+                            {emp.firstName} {emp.lastName}
+                          </option>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <option value="ALL">ALL EMPLOYEES</option>
+                        {hrEmployees.map((emp) => (
+                          <option key={emp._id} value={emp._id}>
+                            {emp.firstName} {emp.lastName}
+                          </option>
+                        ))}
+                      </>
+                    )
+                    }
                   </select>
                 </>
               )}
