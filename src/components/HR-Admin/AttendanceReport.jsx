@@ -25,8 +25,6 @@ const statusBadge = {
 
 const AttendanceReport = () => {
     const user = useSelector((store) => store.user) ; 
-    // ---------------------------------------------------------
-    // filterMode: "today" (default) | "date" | "month"
     const [filterMode, setFilterMode] = useState("today");
     const today = new Date();
     const [selectedDate, setSelectedDate] = useState(today.toISOString().split("T")[0]);
@@ -37,13 +35,13 @@ const AttendanceReport = () => {
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    // ---------------------------------------------------------
+
+    const [deptData , setDeptData] = useState([]) ;
 
     const fetchReport = async () => {
         setLoading(true);
         setError("");
         try {
-            // TODO: build query string based on filterMode
             let query = "";
             if (filterMode === "date") {
                 query = `?date=${selectedDate}`;
@@ -54,8 +52,10 @@ const AttendanceReport = () => {
             if (department) query += `${query ? "&" : "?"}department=${department}`;
 
             const res = await axiosInstance.get(`/attendance/getReport${query}`);
+            const deptres = await axiosInstance.get("/department/get/all") ;
+            setDeptData(deptres.data.data) ;
             setRecords(res?.data?.data);
-            // console.log(records)
+            console.log(res?.data?.data) ;
         } catch (err) {
             setError(err?.response?.data?.message || "Failed to load attendance report");
         } finally {
@@ -167,7 +167,7 @@ const AttendanceReport = () => {
                         className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow lg:ml-auto"
                     >
                         <option value="">All Departments</option>
-                        {/* TODO: map real departments here */}
+                        {deptData?.map((dept)=>(<option key={dept._id} value={dept.departmentName}>{dept.departmentName}</option>))}
                     </select>}
                 </div>
             </div>
@@ -229,11 +229,13 @@ const AttendanceReport = () => {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
-                                                    {r.employeeId?.firstName?.[0]?.toUpperCase() || "U"}
+                                                    {r.employeeId?.profileImage ? (
+                                                        <img src={r.employeeId?.profileImage} alt="userphoto" className="rounded-full object-cover" />
+                                                    ) : "U"}
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-slate-800 dark:text-slate-200">
-                                                        {r.employeeId?.firstName} {r.employeeId?.lastName}
+                                                        {r.employeeId?.firstName} {r.employeeId?.lastName} - {r.employeeId?.role}
                                                     </p>
                                                     <p className="text-xs text-slate-400 dark:text-slate-500">{r.employeeId?.emailId}</p>
                                                 </div>

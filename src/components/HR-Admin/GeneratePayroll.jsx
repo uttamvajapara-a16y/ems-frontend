@@ -43,11 +43,17 @@ const GeneratePayroll = () => {
   const [loadingList, setLoadingList] = useState(true);
   const [payingId, setPayingId] = useState(null);
 
+  const [hrEmployees, setHrEmployees] = useState([]);
+  const [loadingEmp, setLoadingEmp] = useState(true);
+  const [deptData , setDeptData] = useState([]) ;
+
   const fetchPayrolls = async () => {
     setLoadingList(true);
     try {
       const res = await axiosInstance.get("/payroll");
+      const deptres = await axiosInstance.get("/department/get/all") ;
       setPayrolls(res.data.data);
+      setDeptData(deptres.data.data) ;
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load payroll records");
     } finally {
@@ -55,9 +61,26 @@ const GeneratePayroll = () => {
     }
   };
 
+  const fetchHrEmployees = async () => {
+    try {
+      const roleDept = user?.role === "HR" ? (user?.departmentId?.departmentName) : "" ;
+      const res = await axiosInstance.get(`/employees?department=${roleDept}`);
+      // console.log(res) ;
+      setHrEmployees(res.data.data);
+    } catch (err) {
+      setError(err?.response?.data?.message);
+    } finally {
+      setLoadingEmp(false);
+    }
+  }
+
   useEffect(() => {
     fetchPayrolls();
   }, []);
+
+  useEffect(() => {
+    fetchHrEmployees();
+  }, [user]);
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -148,22 +171,20 @@ const GeneratePayroll = () => {
               <button
                 type="button"
                 onClick={() => setTarget("employee")}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  target === "employee"
-                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
-                    : "text-slate-500 dark:text-slate-400"
-                }`}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${target === "employee"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                  : "text-slate-500 dark:text-slate-400"
+                  }`}
               >
                 For Employee
               </button>
               <button
                 type="button"
                 onClick={() => setTarget("hr")}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  target === "hr"
-                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
-                    : "text-slate-500 dark:text-slate-400"
-                }`}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${target === "hr"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                  : "text-slate-500 dark:text-slate-400"
+                  }`}
               >
                 For HR
               </button>
@@ -174,26 +195,55 @@ const GeneratePayroll = () => {
         <form onSubmit={handleGenerate} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-              {target === "hr" ? "HR Employee ID" : "Employee ID"}
+              {target === "hr" ? "HR Employee" : "Employee"}
             </label>
             <div className="relative">
               <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={employeeId}
-                onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="Paste employee _id"
-                required
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
-              />
+              {loadingEmp ? (
+                <div className="min-h-[50px] flex items-center justify-center">
+                  <Loader2 className="animate-spin text-indigo-500" size={15} />
+                </div>
+              ) : hrEmployees === undefined || hrEmployees.length === 0 ? (
+                <p className="text-center text-sm text-slate-400 dark:text-slate-500 py-1">No employee found records yet</p>
+              ) : (
+                <>
+                  <select
+                    name="emp"
+                    id="emp"
+                    onChange={(e) => {
+                      const selectedId = e.target.value ;
+                      console.log(selectedId)
+                      if(selectedId === "ALL"){
+                        setEmployeeId("")
+                        setBasicSalary("")
+                        return ;
+                      }
+                      const selectedEmp = hrEmployees.find((emp) => emp._id = selectedId) ;
+                      if(selectedEmp){
+                        setBasicSalary(selectedEmp.salary) ;
+                        setEmployeeId(selectedEmp._id) ;
+                      }
+                    }}
+                    className="w-full px-10 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                  >
+                    <option value="ALL">ALL EMPLOYEES</option>
+                    {hrEmployees.map((emp) => (
+                      <option key={emp._id} value={emp._id}>
+                        {emp.firstName} {emp.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}
+
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 max-h-20 mt-6">
             <select
               value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
-              className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+              className="px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
             >
               {monthNames.map((m, i) => (
                 <option key={i} value={i}>{m}</option>
@@ -217,6 +267,7 @@ const GeneratePayroll = () => {
             <input
               type="number"
               value={basicSalary}
+              disabled
               onChange={(e) => setBasicSalary(e.target.value)}
               placeholder="50000"
               required

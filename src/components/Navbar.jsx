@@ -23,8 +23,8 @@ const NAV_LINKS = {
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/employees", label: "Employees", icon: Users },
     { to: "/departments", label: "Departments", icon: Building2 },
-    { to: "/leaves", label: "Leaves", icon: Calendar },
-    { to: "/payroll", label: "Payroll", icon: Wallet },
+    { to: "/leaves/approve", label: "Leaves", icon: Calendar },
+    { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/audit-logs", label: "Audit Logs", icon: FileClock },
   ],
   hr: [
