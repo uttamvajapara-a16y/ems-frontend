@@ -15,6 +15,8 @@ import EmployeeList from "./HR-Admin/EmployeeList" ;
 import AttendanceReport from "./HR-Admin/AttendanceReport" ;
 import ApproveLeave from "./HR-Admin/ApproveLeave";
 import GeneratePayroll from "./HR-Admin/GeneratePayroll";
+import Departments from "./HR-Admin/Departments";
+import DepartmentForm from "./HR-Admin/DepartmentForm";
 
 export {
     Body,
@@ -33,5 +35,7 @@ export {
     EmployeeList,
     AttendanceReport,
     ApproveLeave,
-    GeneratePayroll
+    GeneratePayroll,
+    Departments,
+    DepartmentForm,
 }

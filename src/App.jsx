@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { ApproveLeave, AttendanceReport, Body, Dashboard, EmployeeList, GeneratePayroll, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile } from './components'
+import { ApproveLeave, AttendanceReport, Body, Dashboard, DepartmentForm, Departments, EmployeeList, GeneratePayroll, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile } from './components'
 import { Provider } from 'react-redux'
 import store from './utils/appStrore' ;
 
@@ -24,6 +24,8 @@ function App() {
               <Route path="/employees" element={<EmployeeList />} />
               <Route path="/leaves/approve" element={<ApproveLeave />} />
               <Route path="/payroll/generate" element={<GeneratePayroll />} />
+              <Route path="/departments" element={<Departments />} />
+              <Route path="/department/create" element={<DepartmentForm />} />
             </Route>
           </Routes>
         </BrowserRouter>

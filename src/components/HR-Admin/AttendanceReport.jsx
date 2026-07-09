@@ -55,7 +55,7 @@ const AttendanceReport = () => {
             const deptres = await axiosInstance.get("/department/get/all") ;
             setDeptData(deptres.data.data) ;
             setRecords(res?.data?.data);
-            console.log(res?.data?.data) ;
+            // console.log(res?.data?.data) ;
         } catch (err) {
             setError(err?.response?.data?.message || "Failed to load attendance report");
         } finally {
