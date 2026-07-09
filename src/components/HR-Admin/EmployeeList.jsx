@@ -198,9 +198,9 @@ const EmployeeList = () => {
                                         >
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
+                                                    <div className="w-9 h-9 rounded-full bg-gray-500 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
                                                         {/* {emp.firstName?.[0]?.toUpperCase() || "U"} */}
-                                                        <img src={emp.profileImage} alt="photo" className="rounded-full" />
+                                                        <img src={emp.profileImage} alt="photo" className="rounded-full object-center" />
                                                     </div>
                                                     <div>
                                                         <p className="font-medium text-slate-800 dark:text-slate-200">

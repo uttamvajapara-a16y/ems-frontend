@@ -30,7 +30,7 @@ const NAV_LINKS = {
   hr: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/employees", label: "Employees", icon: Users },
-    { to: "/leaves", label: "Leaves", icon: Calendar },
+    { to: "/leaves", label: "My Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/attendance", label: "Attendance", icon: ClipboardList },
   ],

@@ -20,7 +20,7 @@ import {
 import { useSelector } from "react-redux";
 
 const MainDashboard = () => {
-    const user = useSelector((store) => store.user) ;
+    const user = useSelector((store) => store.user);
     const [stats, setStats] = useState(null);
     const [attendance, setAttendance] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -127,12 +127,20 @@ const MainDashboard = () => {
                     </p>
                 </div>
 
-                <Link
-                    to="/attendance/report"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-1 rounded-lg bg-indigo-600 text-white text-sm font-medium shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:shadow-none dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700 dark:shadow-indigo-500/20 transition-colors duration-150"
-                >
-                    Attendance Report
-                </Link>
+                <div className="flex gap-3">
+                    <Link
+                        to="/payroll/generate"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-1 rounded-lg bg-indigo-600 text-white text-sm font-medium shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:shadow-none dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700 dark:shadow-indigo-500/20 transition-colors duration-150"
+                    >
+                        Generate Payroll
+                    </Link>
+                    <Link
+                        to="/attendance/report"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-1 rounded-lg bg-indigo-600 text-white text-sm font-medium shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:shadow-none dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:active:bg-indigo-700 dark:shadow-indigo-500/20 transition-colors duration-150"
+                    >
+                        Attendance Report
+                    </Link>
+                </div>
             </div>
 
             {/* check-in/out widget */}

@@ -11,13 +11,15 @@ const LeaveForm = () => {
     const [reason , setReason] = useState("") ;
     const [loading , setLoading] = useState(false) ;
 
+    const navigate = useNavigate() ;
+
     const handleLeaveApply = async (e) => {
         e.preventDefault() ;
         setError("") ;
         setLoading(true) ;
         try{
             const res = await axiosInstance.post("/leave/apply" , {startDate , endDate , leaveType , reason}) ;
-            nevigate("/leaves")
+            navigate("/leaves")
         } catch (err){
             setError(err?.response?.data?.message || "sonthing went wrong") ;
             console.log("Error in applying leave" + err.message) ;

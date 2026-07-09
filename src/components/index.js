@@ -14,6 +14,7 @@ import MainDashboard from "./HR-Admin/MainDashboard";
 import EmployeeList from "./HR-Admin/EmployeeList" ;
 import AttendanceReport from "./HR-Admin/AttendanceReport" ;
 import ApproveLeave from "./HR-Admin/ApproveLeave";
+import GeneratePayroll from "./HR-Admin/GeneratePayroll";
 
 export {
     Body,
@@ -31,5 +32,6 @@ export {
     MainDashboard,
     EmployeeList,
     AttendanceReport,
-    ApproveLeave
+    ApproveLeave,
+    GeneratePayroll
 }
