@@ -63,7 +63,8 @@ const Profile = () => {
             Object.entries(formData).forEach(([key, val]) => {
                 if (val !== undefined && val !== null) data.append(key, val);
             });
-            const res = await axiosInstance.put(`/employee/update/${user._id}`, data, {
+            const roleToUpdate = user?.role.toLowerCase() ;
+            const res = await axiosInstance.put(`/${roleToUpdate}/update/${user._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setOriginalData(res?.data?.data);
