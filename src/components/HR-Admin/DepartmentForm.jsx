@@ -19,10 +19,10 @@ const DepartmentForm = () => {
         setError("") ;
         setLoading(true) ;
         try{
-            const res = await axiosInstance.post("/department/create" , {departmentName , description , headId, headName }) ;
+            const res = await axiosInstance.post("/department/create" , {departmentName , description , headName }) ;
             navigate("/departments")
         } catch (err){
-            setError(err?.response?.data?.message || "sonthing went wrong") ;
+            setError(err?.response?.data?.message) ;
             console.log("Error in applying leave" + err.message) ;
         } finally {
             setLoading(false) ;

@@ -14,25 +14,25 @@ const Body = () => {
   const navigate = useNavigate();
 
   const fetchUser = async () => {
-    if(user) {
+    if (user) {
       navigate("/dashboard")
-      return 
-    } ;
-    try{
-      const res = await axiosInstance.get("/profile/view") ;
+      return
+    };
+    try {
+      const res = await axiosInstance.get("/profile/view");
       // console.log(res) ;
-      dispatch(addUser(res.data)) ;
-    } catch (err){
-      if(err.response?.status === 401){
-        navigate("/login") ;
+      dispatch(addUser(res.data));
+    } catch (err) {
+      if (err.response?.status === 401) {
+        navigate("/login");
       }
-      console.log("error in fetching user data: " + err.message) ;
+      console.log("error in fetching user data: " + err.message);
     }
   }
 
   useEffect(() => {
     fetchUser();
-  }, [user]) ;
+  }, [user]);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">

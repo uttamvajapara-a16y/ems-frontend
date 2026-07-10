@@ -17,6 +17,8 @@ import ApproveLeave from "./HR-Admin/ApproveLeave";
 import GeneratePayroll from "./HR-Admin/GeneratePayroll";
 import Departments from "./HR-Admin/Departments";
 import DepartmentForm from "./HR-Admin/DepartmentForm";
+import RegisterUser from "./HR-Admin/RegisterUser" ;
+import AuditLogsPage from "./HR-Admin/AuditLogsPage";
 
 export {
     Body,
@@ -38,4 +40,6 @@ export {
     GeneratePayroll,
     Departments,
     DepartmentForm,
+    RegisterUser,
+    AuditLogsPage,
 }

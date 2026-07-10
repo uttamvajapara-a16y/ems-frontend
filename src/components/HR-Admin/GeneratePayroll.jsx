@@ -8,6 +8,8 @@ import {
   CheckCircle2,
   Layers,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 const monthNames = [
@@ -33,6 +35,7 @@ const GeneratePayroll = () => {
   const [year, setYear] = useState(today.getFullYear());
   const [basicSalary, setBasicSalary] = useState("");
   const [allowances, setAllowances] = useState("");
+  const [departmentName, setDepartmentname] = useState("") ;
 
   const [generating, setGenerating] = useState(false);
   const [bulkGenerating, setBulkGenerating] = useState(false);
@@ -47,12 +50,21 @@ const GeneratePayroll = () => {
   const [loadingEmp, setLoadingEmp] = useState(true);
   const [hrData, setHrData] = useState([]);
 
+  const [pagination, setPagination] = useState(null);
+  const [page, setPage] = useState(1);
+  const [month2, setMonth2] = useState("");
+  const [year2, setYear2] = useState("");
+  const [status, setStatus] = useState("");
+  const [role, setRole] = useState("") ;
+
   const fetchPayrolls = async () => {
     setLoadingList(true);
     try {
-      const res = await axiosInstance.get("/payroll");
+      const dept = user.role === "HR" ? user.departmentName : "" ;
+      const res = await axiosInstance.get(`/payroll?page=${page}&month=${month2}&year=${year2}&status=${status}&role=${role}&dept=${dept}`);
       const hrRes = await axiosInstance.get("/hr/getHr");
       setPayrolls(res.data.data);
+      setPagination(res.data.pagination);
       setHrData(hrRes.data.data);
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load payroll records");
@@ -76,11 +88,21 @@ const GeneratePayroll = () => {
 
   useEffect(() => {
     fetchPayrolls();
-  }, []);
+  }, [page, month2, year2, status, role]);
 
   useEffect(() => {
     fetchHrEmployees();
   }, []);
+
+  const clearFilters = () => {
+    setMonth2("") ;
+    setYear2("") ;
+    setStatus("") ;
+    setRole("") ;
+    setPage(1);
+  };
+
+  const hasActiveFilters = month2 || year2 || status || role;
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -91,8 +113,8 @@ const GeneratePayroll = () => {
       const endpoint = target === "hr" ? "/payroll/generate/hr" : "/payroll/generate";
       const payload =
         target === "hr"
-          ? { hrId: employeeId, month: month + 1, year, basicSalary, allowances }
-          : { employeeId, month: month + 1, year, basicSalary, allowances };
+          ? { hrId: employeeId, month: month + 1, year, basicSalary, allowances, departmentName }
+          : { employeeId, month: month + 1, year, basicSalary, allowances, departmentName };
 
       await axiosInstance.post(endpoint, payload);
       setSuccess("Payroll generated successfully");
@@ -218,10 +240,11 @@ const GeneratePayroll = () => {
                         setBasicSalary("")
                         return;
                       }
-                      const selectedEmp = hrEmployees.find((emp) => emp._id === selectedId);
+                      const selectedEmp = target === "hr" ? hrData.find((emp) => emp._id === selectedId) : hrEmployees.find((emp) => emp._id === selectedId);
                       if (selectedEmp) {
                         setBasicSalary(selectedEmp.salary);
                         setEmployeeId(selectedEmp._id);
+                        setDepartmentname(selectedEmp.departmentName);
                       }
                     }}
                     className="w-full px-10 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
@@ -327,6 +350,65 @@ const GeneratePayroll = () => {
         </form>
       </div>
 
+      {/* filter bar */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-4">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+          <select
+            value={month2}
+            onChange={(e) => setMonth2(Number(e.target.value))}
+            className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+          >
+            <option value="" disabled>month</option>
+            {monthNames.map((m, i) => (
+              <option key={i} value={i}>{m}</option>
+            ))}
+          </select>
+          <select
+            value={year2}
+            onChange={(e) => setYear2(Number(e.target.value))}
+            className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+          >
+            <option value="" disabled>year</option>
+            {[today.getFullYear(), today.getFullYear() - 1].map((y) => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+          >
+            <option value="" disabled>status</option>
+            <option value="pending">pending</option>
+            <option value="paid">paid</option>
+            <option value="processing">processing</option>
+            <option value="failed">failed</option>
+          </select>
+
+          {user.role === "Admin" && <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+          >
+            <option value="" disabled>role</option>
+            <option value="HR">HR</option>
+            <option value="Employee">Employee</option>
+            <option value="Admin">Admin</option>
+            <option value="Manager">Manager</option>
+          </select>}
+
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline lg:ml-auto"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* payroll list */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
@@ -345,7 +427,7 @@ const GeneratePayroll = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-left">
-                  <th className="px-6 py-3 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Employee</th>
+                  <th className="px-6 py-3 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Employee(role)</th>
                   <th className="px-6 py-3 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Period</th>
                   <th className="px-6 py-3 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Net Salary</th>
                   <th className="px-6 py-3 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status</th>
@@ -356,7 +438,7 @@ const GeneratePayroll = () => {
                 {payrolls.map((p) => (
                   <tr key={p._id} className="border-b border-slate-100 dark:border-slate-800/60 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="px-6 py-3.5 text-slate-700 dark:text-slate-300">
-                      {p.employeeId?.firstName} {p.employeeId?.lastName}
+                      {p.employeeId?.firstName} {p.employeeId?.lastName}({p.role})
                     </td>
                     <td className="px-6 py-3.5 text-slate-600 dark:text-slate-400 whitespace-nowrap">
                       {monthNames[p.month - 1]} {p.year}
@@ -387,6 +469,34 @@ const GeneratePayroll = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+
+        {/* pagination */}
+        {pagination && pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between px-1">
+            <p className="text-xs text-slate-400 dark:text-slate-500 ml-5">
+              Page {pagination.currentPage} of {pagination.totalPages} · {pagination.logsCount} total
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                disabled={page === 1}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft size={15} />
+                Prev
+              </button>
+              <button
+                onClick={() => setPage((p) => Math.min(p + 1, pagination.totalPages))}
+                disabled={page === pagination.totalPages}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+                <ChevronRight size={15} />
+              </button>
+            </div>
           </div>
         )}
       </div>
