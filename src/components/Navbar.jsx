@@ -22,6 +22,7 @@ const NAV_LINKS = {
   admin: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/employees", label: "Employees", icon: Users },
+    { to: "/viewhr", label: "Hr", icon: Users },
     { to: "/departments", label: "Departments", icon: Building2 },
     { to: "/leaves/approve", label: "Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
@@ -80,7 +81,7 @@ const Navbar = () => {
           {/* logo */}
           <Link
             to="/dashboard"
-            className="flex items-center gap-2 font-semibold text-lg tracking-tight text-slate-900 dark:text-white flex-shrink-0"
+            className="flex items-center gap-2 font-semibold text-lg tracking-tight text-slate-900 dark:text-white shrink-0"
           >
             <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center text-sm font-bold text-white">
               EMS
@@ -103,7 +104,7 @@ const Navbar = () => {
           </div>
 
           {/* right side: theme toggle + profile + logout */}
-          <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+          <div className="hidden md:flex items-center gap-2 shrink-0">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -113,8 +114,7 @@ const Navbar = () => {
             </button>
 
             <Link to="/profile" className="flex items-center gap-2 group pl-1">
-              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-medium text-white flex-shrink-0">
-                {/* {user.firstName?.[0]?.toUpperCase() || "U"} */}
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-medium text-white shrink-0">
                 <img src={user?.profileImage} alt="user photo" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="text-sm leading-tight hidden lg:block">
@@ -122,7 +122,8 @@ const Navbar = () => {
                   {user.firstName} {user.lastName}
                 </p>
                 <p className="text-xs text-slate-400 dark:text-slate-500 capitalize whitespace-nowrap">
-                  {role}{user?.departmentId?.departmentName ? ` - ${user.departmentId.departmentName}` : ""}
+                  {/* {role}{user?.departmentId?.departmentName ? ` - ${user.departmentId.departmentName}` : ""} */}
+                  {role}-{user?.departmentName}
                 </p>
               </div>
             </Link>
@@ -138,7 +139,7 @@ const Navbar = () => {
 
           {/* mobile menu toggle */}
           <button
-            className="md:hidden text-slate-600 dark:text-slate-300 flex-shrink-0"
+            className="md:hidden text-slate-600 dark:text-slate-300 shrink-0"
             onClick={() => setMobileOpen((prev) => !prev)}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}

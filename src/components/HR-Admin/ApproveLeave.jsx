@@ -163,7 +163,6 @@ const ApproveLeave = () => {
             <div key={leave._id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0">
-                  {/* {leave.applierId?.firstName?.[0]?.toUpperCase() || "U"} */}
                   <img src={leave.applierId?.profileImage} alt="UserProfile" className="rounded-full object-cover" />
                 </div>
                 <div>

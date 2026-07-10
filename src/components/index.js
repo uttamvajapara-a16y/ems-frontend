@@ -19,6 +19,7 @@ import Departments from "./HR-Admin/Departments";
 import DepartmentForm from "./HR-Admin/DepartmentForm";
 import RegisterUser from "./HR-Admin/RegisterUser" ;
 import AuditLogsPage from "./HR-Admin/AuditLogsPage";
+import HRList from "./HR-Admin/HRList";
 
 export {
     Body,
@@ -42,4 +43,5 @@ export {
     DepartmentForm,
     RegisterUser,
     AuditLogsPage,
+    HRList,
 }

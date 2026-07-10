@@ -19,7 +19,7 @@ import { addUser } from "../utils/userSlice";
 const Profile = () => {
     const user = useSelector((store) => store.user);
     const dispatch = useDispatch();
-    const fileInputRef = useRef(null) ;
+    const fileInputRef = useRef(null);
 
     const userData = {
         firstName: user?.firstName || "",
@@ -28,7 +28,8 @@ const Profile = () => {
         gender: user?.gender || "male",
         profileImage: user?.profileImage || "",
         Address: user?.Address || "",
-        phone: user?.phone || ""
+        phone: user?.phone || "",
+        emailId: user?.emailId || ""
     }
 
     const [formData, setFormData] = useState(userData);
@@ -63,7 +64,7 @@ const Profile = () => {
             Object.entries(formData).forEach(([key, val]) => {
                 if (val !== undefined && val !== null) data.append(key, val);
             });
-            const roleToUpdate = user?.role.toLowerCase() ;
+            const roleToUpdate = user?.role.toLowerCase();
             const res = await axiosInstance.put(`/${roleToUpdate}/update/${user._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
@@ -84,7 +85,7 @@ const Profile = () => {
     };
 
     const handleCameraClick = () => {
-        fileInputRef.current.click() ;
+        fileInputRef.current.click();
     }
 
     return (
@@ -170,9 +171,7 @@ const Profile = () => {
                             <input
                                 type="email"
                                 defaultValue={user?.emailId}
-                                disabled={user?.role !== "Admin"}
-
-                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-sm cursor-not-allowed"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-sm"
                             />
                         </div>
                     </div>
@@ -290,11 +289,6 @@ const Profile = () => {
                             </label>
                             <div className="relative">
                                 <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                                {/* <input
-                                type="text"
-                                defaultValue={user?.age || "—"}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
-                            /> */}
                                 <select
                                     name="gender"
                                     id="gender"
@@ -310,7 +304,7 @@ const Profile = () => {
                         </div>
 
                         {/* Address - editable */}
-                        <div className="sm:col-span-2">
+                        <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                                 Address
                             </label>
@@ -321,7 +315,8 @@ const Profile = () => {
                                     value={formData.Address}
                                     onChange={(e) => handleChange("Address", e.target.value)}
                                     placeholder="Enter your current address"
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                                    // className="w-full pl-10 pr-4 py-0.3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                                 />
                             </div>
                         </div>

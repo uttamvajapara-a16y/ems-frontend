@@ -14,7 +14,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const EmployeeList = () => {
+const HRList = () => {
     const user = useSelector((store) => store.user);
     const useDebounce = (value, delay = 800) => {
         const [debouncedValue, setDebouncedValue] = useState(value);
@@ -41,9 +41,10 @@ const EmployeeList = () => {
 
     const fetchEmployees = async () => {
         try {
-            const res = await axiosInstance.get(`/employees?page=${page}&search=${search}&department=${department}&status=${status}&attendance=${attendanceFilter}`)
+            const res = await axiosInstance.get(`/hr/getHr?page=${page}&search=${search}&department=${department}&status=${status}&attendance=${attendanceFilter}`)
             setEmployees(res?.data?.data);
             setPagination(res?.data?.pagination);
+            // console.log(res?.data?.data)
         } catch (err) {
             setError(err?.response?.data?.message || "Failed to fetch employees")
         } finally {
@@ -54,9 +55,9 @@ const EmployeeList = () => {
     const handleDeleteEmp = async (id) => {
         setLoading(true) ;
         try{
-            await axiosInstance.delete(`/employee/delete/${id}`)
+            await axiosInstance.delete(`/hr/delete/${id}`)
         } catch (err) {
-            setError(err?.response?.data?.message || "error in deleting Employee")
+            setError(err?.response?.data?.message || "error in deleting hr")
         } finally {
             setLoading(false) ;
         }
@@ -90,7 +91,7 @@ const EmployeeList = () => {
             {/* header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Employees</h1>
+                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">HRS</h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage your organization's workforce.
                     </p>
@@ -174,7 +175,7 @@ const EmployeeList = () => {
                 ) : employees?.length === 0 || employees === undefined ? (
                     <div className="text-center py-16">
                         <Users className="mx-auto text-slate-300 dark:text-slate-700 mb-3" size={36} />
-                        <p className="text-sm text-slate-400 dark:text-slate-500">No employees found</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-500">No hrs found</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -182,7 +183,7 @@ const EmployeeList = () => {
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-left">
                                     <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                                        Employee
+                                        Hrs
                                     </th>
                                     <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                                         Department
@@ -223,7 +224,7 @@ const EmployeeList = () => {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
-                                                {emp.departmentId?.departmentName || "—"}
+                                                {emp.departmentName || "—"}
                                             </td>
                                             <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                 {emp.designation || "—"}
@@ -298,4 +299,4 @@ const EmployeeList = () => {
     );
 };
 
-export default EmployeeList;
+export default HRList;
