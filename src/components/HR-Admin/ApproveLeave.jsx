@@ -150,7 +150,7 @@ const ApproveLeave = () => {
       {/* leave requests list */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800">
         {loading ? (
-          <div className="min-h-[300px] flex items-center justify-center">
+          <div className="min-h-75 flex items-center justify-center">
             <Loader2 className="animate-spin text-indigo-500" size={28} />
           </div>
         ) : leaves.length === 0 ? (
@@ -162,7 +162,7 @@ const ApproveLeave = () => {
           leaves.map((leave) => (
             <div key={leave._id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0">
                   {/* {leave.applierId?.firstName?.[0]?.toUpperCase() || "U"} */}
                   <img src={leave.applierId?.profileImage} alt="UserProfile" className="rounded-full object-cover" />
                 </div>
@@ -189,7 +189,7 @@ const ApproveLeave = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full border capitalize ${statusBadge[leave.status]}`}>
                   {leave.status}
                 </span>

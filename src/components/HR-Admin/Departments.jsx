@@ -43,7 +43,7 @@ const Departments = () => {
 
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
                 {loading ? (
-                    <div className="min-h-[300px] flex items-center justify-center">
+                    <div className="min-h-75 flex items-center justify-center">
                         <Loader2 className="animate-spin text-indigo-500" size={28} />
                     </div>
                 ) : departments.length === 0 ? (

@@ -105,7 +105,7 @@ const Profile = () => {
             >
                 {/* --- top section: avatar + name + role badge --- */}
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-6 border-b border-slate-100 dark:border-slate-800">
-                    <div className="relative flex-shrink-0">
+                    <div className="relative shrink-0">
                         <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-semibold text-white">
                             {previewImage
                                 ? <img src={previewImage} alt="user photo" className="w-full h-full object-cover rounded-full" />

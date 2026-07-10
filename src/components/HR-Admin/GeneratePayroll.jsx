@@ -222,7 +222,7 @@ const GeneratePayroll = () => {
             <div className="relative">
               <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               {loadingEmp ? (
-                <div className="min-h-[50px] flex items-center justify-center">
+                <div className="min-h-12.5 flex items-center justify-center">
                   <Loader2 className="animate-spin text-indigo-500" size={15} />
                 </div>
               ) : hrEmployees === undefined || hrEmployees.length === 0 ? (
@@ -417,7 +417,7 @@ const GeneratePayroll = () => {
         </div>
 
         {loadingList ? (
-          <div className="min-h-[200px] flex items-center justify-center">
+          <div className="min-h-50 flex items-center justify-center">
             <Loader2 className="animate-spin text-indigo-500" size={24} />
           </div>
         ) : payrolls.length === 0 ? (

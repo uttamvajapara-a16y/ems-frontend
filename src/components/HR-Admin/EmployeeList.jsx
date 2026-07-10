@@ -157,7 +157,7 @@ const EmployeeList = () => {
             {/* employee table */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
                 {loading ? (
-                    <div className="min-h-[300px] flex items-center justify-center">
+                    <div className="min-h-75 flex items-center justify-center">
                         <Loader2 className="animate-spin text-indigo-500" size={28} />
                     </div>
                 ) : employees?.length === 0 || employees === undefined ? (
@@ -199,7 +199,7 @@ const EmployeeList = () => {
                                         >
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-9 h-9 rounded-full bg-gray-500 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
+                                                    <div className="w-9 h-9 rounded-full bg-gray-500 flex items-center justify-center text-xs font-semibold text-white shrink-0">
                                                         {/* {emp.firstName?.[0]?.toUpperCase() || "U"} */}
                                                         <img src={emp.profileImage} alt="photo" className="rounded-full object-center" />
                                                     </div>

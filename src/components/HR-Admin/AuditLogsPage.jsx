@@ -138,7 +138,7 @@ const AuditLogPage = () => {
       {/* logs list */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         {loading ? (
-          <div className="min-h-[300px] flex items-center justify-center">
+          <div className="min-h-75 flex items-center justify-center">
             <Loader2 className="animate-spin text-indigo-500" size={28} />
           </div>
         ) : logs.length === 0 ? (
@@ -154,7 +154,7 @@ const AuditLogPage = () => {
 
               return (
                 <div key={log._id} className="flex items-start gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center border flex-shrink-0 ${config.bg}`}>
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center border shrink-0 ${config.bg}`}>
                     <Icon size={16} className={config.color} />
                   </div>
 
@@ -180,7 +180,7 @@ const AuditLogPage = () => {
                     </div>
                   </div>
 
-                  <span className="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap flex-shrink-0">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap shrink-0">
                     {new Date(log.createdAt).toLocaleString(undefined, {
                       day: "numeric",
                       month: "short",

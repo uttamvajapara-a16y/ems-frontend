@@ -230,7 +230,7 @@ const RegisterUser = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="mx-auto w-[300px] px-3 py-2.5 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+                    className="mx-auto w-75 px-3 py-2.5 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-sm font-medium rounded-lg transition-colors"
                 >
                     {
                         loading ? (
