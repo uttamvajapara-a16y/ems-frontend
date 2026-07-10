@@ -253,6 +253,8 @@ const EmployeeList = () => {
                                                         delete
                                                     </button>
                                                     <Link
+                                                        to={`/edit/${emp._id}`}
+                                                        state={{toEdit: emp}}
                                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 ml-3 rounded-lg bg-green-50 text-green-700 text-xs font-medium border border-green-200 hover:bg-green-100 active:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-1 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/20 transition-colors duration-150"
                                                     >
                                                         Edit

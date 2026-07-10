@@ -46,7 +46,7 @@ const HRList = () => {
             setPagination(res?.data?.pagination);
             // console.log(res?.data?.data)
         } catch (err) {
-            setError(err?.response?.data?.message || "Failed to fetch employees")
+            setError(err?.response?.data?.message || "Failed to fetch hrs")
         } finally {
             setLoading(false);
         }

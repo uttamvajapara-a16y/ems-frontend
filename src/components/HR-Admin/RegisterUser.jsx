@@ -49,7 +49,7 @@ const RegisterUser = () => {
             dateOfJoining,
             salary
         }
-        console.log(userData)
+        // console.log(userData)
         try {
             setloading(true);
             const res = await axiosInstance.post("/register", userData);

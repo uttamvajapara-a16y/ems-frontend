@@ -1,0 +1,436 @@
+// import React from 'react'
+
+// const Edit = () => {
+//   return (
+//     <div>
+
+//     </div>
+//   )
+// }
+
+// export default Edit
+
+import React, { useEffect, useState } from "react";
+import {
+    User,
+    Mail,
+    Phone,
+    Building2,
+    Briefcase,
+    Calendar,
+    MapPin,
+    Save,
+    X,
+    Camera,
+    Loader2,
+} from "lucide-react";
+import axiosInstance from "../../utils/axiosInstance";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+const Edit = () => {
+    const location = useLocation();
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const [employee, setEmployee] = useState(location.state?.employee || null);
+    const [loading, setLoading] = useState(!location.state?.employee);
+    // console.log("employee first");
+    // console.log(employee) ;
+
+    // const userData = {
+    //     firstName: employee?.firstName || "" ,
+    //     lastName: employee?.lastName || "" ,
+    //     age: employee?.age || "" ,
+    //     gender: employee?.gender || "",
+    //     profileImage: employee?.profileImage || "" ,
+    //     Address: employee?.Address || "" ,
+    //     phone: employee?.phone || "" ,
+    //     emailId: employee?.emailId || "" ,
+    //     status: employee?.status || "" ,
+    //     dateOfJoining: employee?.dateOfJoining || "" ,
+    //     salary: employee?.salary || "" ,
+    // }
+
+    const [formData, setFormData] = useState({});
+    const [originalData, setOriginalData] = useState({});
+    const [isChanged, setIsChanged] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
+    // console.log(formData) ;
+
+    const [previewImage, setPreviewImage] = useState(employee?.profileImage || "");
+
+    // helper: format value for <input type="date"> (expects yyyy-MM-dd)
+    // const formatDateForInput = (val) => {
+    //     if (!val) return "";
+    //     const tryDate = new Date(val);
+    //     if (!isNaN(tryDate)) {
+    //         const yyyy = tryDate.getFullYear();
+    //         const mm = String(tryDate.getMonth() + 1).padStart(2, "0");
+    //         const dd = String(tryDate.getDate()).padStart(2, "0");
+    //         return `${yyyy}-${mm}-${dd}`;
+    //     }
+    //     // fallback for common MM/DD/YYYY or M/D/YYYY formats
+    //     const m = val.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    //     if (m) {
+    //         const mm = String(m[1]).padStart(2, "0");
+    //         const dd = String(m[2]).padStart(2, "0");
+    //         const yyyy = m[3];
+    //         return `${yyyy}-${mm}-${dd}`;
+    //     }
+    //     return "";
+    // };
+
+    const handleChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        setIsChanged(true);
+    };
+
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (!file) return;
+    //     setFormData(prev => ({ ...prev, profileImage: file }));
+    //     setPreviewImage(URL.createObjectURL(file));
+    //     setIsChanged(true);
+    // };
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        setSuccess("");
+        try {
+            const data = new FormData();
+            Object.entries(formData).forEach(([key, val]) => {
+                if (val !== undefined && val !== null) data.append(key, val);
+            });
+            const roleToUpdate = employee?.role.toLowerCase();
+            const res = await axiosInstance.put(`/${roleToUpdate}/update/${employee._id}`, data);
+            setOriginalData(res?.data?.data);
+            setSuccess(res?.data?.message);
+            setIsChanged(false);
+        } catch (err) {
+            setError(err?.response?.data?.message || "Failed to update profile");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancel = () => {
+        setFormData(originalData);
+        setIsChanged(false);
+    };
+
+    // console.log(employee)
+
+    useEffect(() => {
+        if (!employee) {
+            const fetchEmployee = async () => {
+                try {
+                    const res = await axiosInstance.get(`/employees/${id}`);
+                    setEmployee(res.data.data);
+                } catch (err) {
+                    console.error("Failed to load data:", err.message);
+                    setError(err?.response?.data?.message || "Failed to load data:");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchEmployee();
+        }
+    }, [id, employee]);
+
+    // keep formData in sync when employee is loaded/updated
+    useEffect(() => {
+        if (employee) {
+            // const data = {
+            //     firstName: employee.firstName || "",
+            //     lastName: employee.lastName || "",
+            //     age: employee.age || "",
+            //     gender: employee.gender || "",
+            //     profileImage: employee.profileImage || "",
+            //     Address: employee.Address || "",
+            //     phone: employee.phone || "",
+            //     emailId: employee.emailId || "",
+            //     status: employee.status || "",
+            //     dateOfJoining: employee.dateOfJoining || "",
+            //     salary: employee.salary || "",
+            // };
+            const data = {
+                firstName: employee?.firstName || "",
+                lastName: employee?.lastName || "",
+                age: employee?.age || "",
+                gender: employee?.gender || "male",
+                profileImage: employee?.profileImage || "",
+                Address: employee?.Address || "",
+                phone: employee?.phone || "",
+                emailId: employee?.emailId || "",
+                status: employee?.status || "",
+                dateOfJoining: employee?.dateOfJoining || "",
+                salary: employee?.salary || "",
+            }
+            setFormData(data);
+            setOriginalData(data);
+            setPreviewImage(employee.profileImage || "");
+            setLoading(false);
+        }
+    }, [employee]);
+
+    // console.log("employee after useEffect");
+    // console.log(formData) ;
+    // console.log(formData.dateOfJoining) ;
+    // console.log(typeof formData.dateOfJoining) ;
+
+    return (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+            {/* header */}
+            <div>
+                <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Profile</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    View and update information.
+                </p>
+            </div>
+
+            {error && <div className="px-4 py-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-sm text-red-600 dark:text-red-400">{error}</div>}
+            {success && <div className="px-4 py-3 rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-sm text-green-600 dark:text-green-400">{success}</div>}
+
+            <form
+                onSubmit={handleSave}
+                className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800"
+            >
+                {/* --- top section: avatar + name + role badge --- */}
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-6 border-b border-slate-100 dark:border-slate-800">
+                    <div className="relative shrink-0">
+                        <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-semibold text-white">
+                            {previewImage
+                                ? <img src={previewImage} alt="user photo" className="w-full h-full object-cover rounded-full" />
+                                : <span>{employee?.firstName?.[0]?.toUpperCase() || "U"}</span>
+                            }
+                        </div>
+                        {/* optional avatar upload button - only wire this up if you want photo upload later */}
+                        <button
+                            type="button"
+                            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm cursor-pointer"
+                            title="Change photo"
+                            disabled
+                        >
+                            <Camera size={13} />
+                        </button>
+                    </div>
+
+                    <div className="text-center sm:text-left">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                            {employee?.firstName} {employee?.lastName}
+                        </h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">{employee?.designation || "—"}</p>
+                        <span className="inline-block mt-2 text-xs font-medium px-2.5 py-1 rounded-full border bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20 capitalize">
+                            {employee?.role}
+                        </span>
+                    </div>
+                </div>
+
+                {/* --- form fields --- */}
+                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* First Name */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            First Name
+                        </label>
+                        <div className="relative">
+                            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="text"
+                                value={formData.firstName}
+                                onChange={(e) => handleChange("firstName", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Email - usually read-only, login identity shouldn't change casually */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Email
+                        </label>
+                        <div className="relative">
+                            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="email"
+                                value={formData?.emailId}
+                                onChange={(e) => handleChange("emailId", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Last Name */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Last Name
+                        </label>
+                        <div className="relative">
+                            <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="text"
+                                value={formData.lastName}
+                                onChange={(e) => handleChange("lastName", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Status - usually read-only too */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Status
+                        </label>
+                        <div className="relative">
+                            <Briefcase size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <select
+                                value={formData.status}
+                                onChange={(e) => handleChange("status", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            >
+                                <option value="" disabled>Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Phone
+                        </label>
+                        <div className="relative">
+                            <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="tel"
+                                value={formData.phone}
+                                onChange={(e) => handleChange("phone", e.target.value)}
+                                placeholder="+91 9999999999"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Date of Joining - read-only */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Date of Joining
+                        </label>
+                        <div className="relative">
+                            <Calendar size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="date"
+                                value={
+                                    formData.dateOfJoining
+                                        ? new Date(formData.dateOfJoining).toISOString().split("T")[0]
+                                        : ""
+                                }
+                                onChange={(e) => handleChange("dateOfJoining", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* age */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Age
+                        </label>
+                        <div className="relative">
+                            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="text"
+                                value={formData.age}
+                                onChange={(e) => handleChange("age", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* salary */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Salary
+                        </label>
+                        <div className="relative">
+                            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="text"
+                                value={formData.salary}
+                                onChange={(e) => handleChange("salary", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+
+                    {/* gender  */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            gender
+                        </label>
+                        <div className="relative">
+                            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <select
+                                name="gender"
+                                id="gender"
+                                value={formData.gender}
+                                onChange={(e) => handleChange("gender", e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            >
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Address - editable */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Address
+                        </label>
+                        <div className="relative">
+                            <MapPin size={16} className="absolute left-3 top-3 text-slate-400" />
+                            <textarea
+                                rows={2}
+                                value={formData.Address}
+                                onChange={(e) => handleChange("Address", e.target.value)}
+                                placeholder="Enter your current address"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- action buttons --- */}
+                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 rounded-b-2xl">
+                    <button
+                        type="button"
+                        onClick={handleCancel}
+                        disabled={!isChanged}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                        <X size={15} />
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        disabled={!isChanged || loading}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors"
+                    >
+                        {loading ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+};
+
+export default Edit;
