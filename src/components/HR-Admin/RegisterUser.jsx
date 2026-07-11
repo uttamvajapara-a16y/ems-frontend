@@ -9,15 +9,15 @@ const RegisterUser = () => {
     const [loading, setloading] = useState(false);
     const [fetchingDepts, setFetchingDepts] = useState(true);
 
-    const [firstName, setFirstname] = useState("meet");
-    const [lastName, setLastname] = useState("savaj");
-    const [emailId, setEmailId] = useState("savaj@gmail.com");
-    const [password, setPassword] = useState("Savaj@124");
+    const [firstName, setFirstname] = useState("");
+    const [lastName, setLastname] = useState("");
+    const [emailId, setEmailId] = useState("");
+    const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [departmentName, setDepartmentName] = useState("");
     const [designation, setDesignation] = useState("");
     const [dateOfJoining, setDateOfJoining] = useState("");
-    const [salary, setSalary] = useState("30000");
+    const [salary, setSalary] = useState("");
 
     const [departments, setDepartments] = useState([]);
 

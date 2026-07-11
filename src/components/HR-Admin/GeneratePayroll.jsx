@@ -62,7 +62,8 @@ const GeneratePayroll = () => {
     try {
       const dept = user.role === "HR" ? user.departmentName : "" ;
       const res = await axiosInstance.get(`/payroll?page=${page}&month=${month2}&year=${year2}&status=${status}&role=${role}&dept=${dept}`);
-      const hrRes = await axiosInstance.get("/hr/getHr");
+      const hrRes = await axiosInstance.get("/hr");
+      console.log(res?.data?.data) ;
       setPayrolls(res.data.data);
       setPagination(res.data.pagination);
       setHrData(hrRes.data.data);

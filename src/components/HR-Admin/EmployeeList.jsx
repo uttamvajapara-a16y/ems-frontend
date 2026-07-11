@@ -37,35 +37,51 @@ const EmployeeList = () => {
     const [department, setDepartment] = useState("");
     const [status, setStatus] = useState("");        // employee active/inactive
     const [attendanceFilter, setAttendanceFilter] = useState(""); // "present" | "absent" | ""
+    const [forceFilter, setForceFilter] = useState("hr"); // "present" | "absent" | ""
     const [page, setPage] = useState(1);
 
+    const [deptData, setDeptData] = useState([]);
+
     const fetchEmployees = async () => {
+        setLoading(true);
         try {
-            const res = await axiosInstance.get(`/employees?page=${page}&search=${search}&department=${department}&status=${status}&attendance=${attendanceFilter}`)
+            const res = await axiosInstance.get(`/${forceFilter}?page=${page}&search=${debouncedSearch}&department=${department}&status=${status}&attendance=${attendanceFilter}`)
             setEmployees(res?.data?.data);
             setPagination(res?.data?.pagination);
         } catch (err) {
-            setError(err?.response?.data?.message || "Failed to fetch employees")
+            setError(err?.response?.data?.message || `Failed to fetch ${forceFilter}`)
         } finally {
             setLoading(false);
         }
     };
 
     const handleDeleteEmp = async (id) => {
-        setLoading(true) ;
-        try{
+        setLoading(true);
+        try {
             await axiosInstance.delete(`/employee/delete/${id}`)
         } catch (err) {
             setError(err?.response?.data?.message || "error in deleting Employee")
         } finally {
-            setLoading(false) ;
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         if (!user) return;
         fetchEmployees();
-    }, [page, debouncedSearch, department, status, attendanceFilter, user, handleDeleteEmp]);
+    }, [page, debouncedSearch, department, status, attendanceFilter, user, forceFilter]);
+
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            try {
+                const res = await axiosInstance.get("/department/get/all");
+                setDeptData(res.data.data);
+            } catch (err) {
+                console.error("Failed to fetch departments:", err.message);
+            }
+        };
+        fetchDepartments();
+    }, []);
 
     const attendanceStyles = {
         present: {
@@ -90,10 +106,32 @@ const EmployeeList = () => {
             {/* header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Employees</h1>
+                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{forceFilter.toUpperCase()}</h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage your organization's workforce.
                     </p>
+                </div>
+
+                {/* HR / EMPLOYEES TOGGLE BUTTON */}
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                    <button
+                        onClick={() => { setForceFilter("hr"); setPage(1); }}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "hr"
+                            ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                            : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                            }`}
+                    >
+                        HR
+                    </button>
+                    <button
+                        onClick={() => { setForceFilter("employees"); setPage(1); }}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "employees"
+                            ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                            : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                            }`}
+                    >
+                        EMPLOYEE
+                    </button>
                 </div>
             </div>
 
@@ -125,8 +163,9 @@ const EmployeeList = () => {
                         className="px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                     >
                         <option value="">All Departments</option>
-                        <option value="IT DEPT">IT DEPT</option>
-                        <option value="ARCHITECT">ARCHITECT</option>
+                        {deptData?.map((d) => (
+                            <option key={d._id} value={d.departmentName}>{d.departmentName}</option>
+                        ))}
                         {/* TODO: map real departments here, e.g. departments.map(d => <option key={d._id} value={d._id}>{d.name}</option>) */}
                     </select>
 
@@ -182,7 +221,7 @@ const EmployeeList = () => {
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-left">
                                     <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                                        Employee
+                                        {forceFilter.toUpperCase()}
                                     </th>
                                     <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                                         Department
@@ -223,7 +262,7 @@ const EmployeeList = () => {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
-                                                {emp.departmentId?.departmentName || "—"}
+                                                {emp.departmentName || "—"}
                                             </td>
                                             <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                 {emp.designation || "—"}
@@ -254,7 +293,7 @@ const EmployeeList = () => {
                                                     </button>
                                                     <Link
                                                         to={`/edit/${emp._id}`}
-                                                        state={{toEdit: emp}}
+                                                        state={{ toEdit: emp }}
                                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 ml-3 rounded-lg bg-green-50 text-green-700 text-xs font-medium border border-green-200 hover:bg-green-100 active:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-1 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/20 transition-colors duration-150"
                                                     >
                                                         Edit

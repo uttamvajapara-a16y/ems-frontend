@@ -1,7 +1,6 @@
 import React from 'react'
 import EmployeeDashboard from './EmployeeDashboard'
 import { useSelector } from 'react-redux'
-import Menubar from './Menubar';
 import MainDashboard from './HR-Admin/MainDashboard';
 
 const Dahsboard = () => {

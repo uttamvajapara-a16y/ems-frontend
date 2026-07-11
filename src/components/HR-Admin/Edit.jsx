@@ -1,15 +1,3 @@
-// import React from 'react'
-
-// const Edit = () => {
-//   return (
-//     <div>
-
-//     </div>
-//   )
-// }
-
-// export default Edit
-
 import React, { useEffect, useState } from "react";
 import {
     User,
@@ -32,24 +20,24 @@ const Edit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [employee, setEmployee] = useState(location.state?.employee || null);
-    const [loading, setLoading] = useState(!location.state?.employee);
+    const [employee, setEmployee] = useState(location.state?.toEdit || null);
+    const [loading, setLoading] = useState(!location.state?.toEdit);
     // console.log("employee first");
     // console.log(employee) ;
 
-    // const userData = {
-    //     firstName: employee?.firstName || "" ,
-    //     lastName: employee?.lastName || "" ,
-    //     age: employee?.age || "" ,
-    //     gender: employee?.gender || "",
-    //     profileImage: employee?.profileImage || "" ,
-    //     Address: employee?.Address || "" ,
-    //     phone: employee?.phone || "" ,
-    //     emailId: employee?.emailId || "" ,
-    //     status: employee?.status || "" ,
-    //     dateOfJoining: employee?.dateOfJoining || "" ,
-    //     salary: employee?.salary || "" ,
-    // }
+    const userData = {
+        firstName: employee?.firstName || "" ,
+        lastName: employee?.lastName || "" ,
+        age: employee?.age || "" ,
+        gender: employee?.gender || "",
+        profileImage: employee?.profileImage || "" ,
+        Address: employee?.Address || "" ,
+        phone: employee?.phone || "" ,
+        emailId: employee?.emailId || "" ,
+        status: employee?.status || "" ,
+        dateOfJoining: employee?.dateOfJoining || "" ,
+        salary: employee?.salary || "" ,
+    }
 
     const [formData, setFormData] = useState({});
     const [originalData, setOriginalData] = useState({});
@@ -61,39 +49,10 @@ const Edit = () => {
 
     const [previewImage, setPreviewImage] = useState(employee?.profileImage || "");
 
-    // helper: format value for <input type="date"> (expects yyyy-MM-dd)
-    // const formatDateForInput = (val) => {
-    //     if (!val) return "";
-    //     const tryDate = new Date(val);
-    //     if (!isNaN(tryDate)) {
-    //         const yyyy = tryDate.getFullYear();
-    //         const mm = String(tryDate.getMonth() + 1).padStart(2, "0");
-    //         const dd = String(tryDate.getDate()).padStart(2, "0");
-    //         return `${yyyy}-${mm}-${dd}`;
-    //     }
-    //     // fallback for common MM/DD/YYYY or M/D/YYYY formats
-    //     const m = val.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    //     if (m) {
-    //         const mm = String(m[1]).padStart(2, "0");
-    //         const dd = String(m[2]).padStart(2, "0");
-    //         const yyyy = m[3];
-    //         return `${yyyy}-${mm}-${dd}`;
-    //     }
-    //     return "";
-    // };
-
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         setIsChanged(true);
     };
-
-    // const handleImageChange = (e) => {
-    //     const file = e.target.files[0];
-    //     if (!file) return;
-    //     setFormData(prev => ({ ...prev, profileImage: file }));
-    //     setPreviewImage(URL.createObjectURL(file));
-    //     setIsChanged(true);
-    // };
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -128,7 +87,8 @@ const Edit = () => {
         if (!employee) {
             const fetchEmployee = async () => {
                 try {
-                    const res = await axiosInstance.get(`/employees/${id}`);
+                    const role = formData?.role === "HR" ? "hr" : "employees" ;
+                    const res = await axiosInstance.get(`/${role}/${id}`);
                     setEmployee(res.data.data);
                 } catch (err) {
                     console.error("Failed to load data:", err.message);
@@ -144,19 +104,6 @@ const Edit = () => {
     // keep formData in sync when employee is loaded/updated
     useEffect(() => {
         if (employee) {
-            // const data = {
-            //     firstName: employee.firstName || "",
-            //     lastName: employee.lastName || "",
-            //     age: employee.age || "",
-            //     gender: employee.gender || "",
-            //     profileImage: employee.profileImage || "",
-            //     Address: employee.Address || "",
-            //     phone: employee.phone || "",
-            //     emailId: employee.emailId || "",
-            //     status: employee.status || "",
-            //     dateOfJoining: employee.dateOfJoining || "",
-            //     salary: employee.salary || "",
-            // };
             const data = {
                 firstName: employee?.firstName || "",
                 lastName: employee?.lastName || "",
@@ -169,6 +116,7 @@ const Edit = () => {
                 status: employee?.status || "",
                 dateOfJoining: employee?.dateOfJoining || "",
                 salary: employee?.salary || "",
+                role: employee?.role
             }
             setFormData(data);
             setOriginalData(data);
@@ -178,9 +126,6 @@ const Edit = () => {
     }, [employee]);
 
     // console.log("employee after useEffect");
-    // console.log(formData) ;
-    // console.log(formData.dateOfJoining) ;
-    // console.log(typeof formData.dateOfJoining) ;
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">

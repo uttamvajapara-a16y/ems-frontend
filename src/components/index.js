@@ -9,7 +9,6 @@ import MyLeaves from "./MyLeaves";
 import LeaveForm from "./LeaveForm";
 import Payslips from "./Payslips";
 import Profile from "./Profile" ;
-import Menubar from "./Menubar" ;
 import MainDashboard from "./HR-Admin/MainDashboard";
 import EmployeeList from "./HR-Admin/EmployeeList" ;
 import AttendanceReport from "./HR-Admin/AttendanceReport" ;
@@ -19,7 +18,6 @@ import Departments from "./HR-Admin/Departments";
 import DepartmentForm from "./HR-Admin/DepartmentForm";
 import RegisterUser from "./HR-Admin/RegisterUser" ;
 import AuditLogsPage from "./HR-Admin/AuditLogsPage";
-import HRList from "./HR-Admin/HRList";
 import Edit from "./HR-Admin/Edit";
 
 export {
@@ -34,7 +32,6 @@ export {
     LeaveForm,
     Payslips,
     Profile,
-    Menubar,
     MainDashboard,
     EmployeeList,
     AttendanceReport,
@@ -44,6 +41,5 @@ export {
     DepartmentForm,
     RegisterUser,
     AuditLogsPage,
-    HRList,
     Edit
 }
