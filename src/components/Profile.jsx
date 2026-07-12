@@ -330,7 +330,7 @@ const Profile = () => {
                     <button
                         type="button"
                         onClick={handleCancel}
-                        disabled={!isChanged}
+                        disabled={!isChanged || user.role === "Admin"}
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     >
                         <X size={15} />
@@ -339,7 +339,7 @@ const Profile = () => {
 
                     <button
                         type="submit"
-                        disabled={!isChanged || loading}
+                        disabled={!isChanged || loading || user.role === "Admin"}
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors"
                     >
                         {loading ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}

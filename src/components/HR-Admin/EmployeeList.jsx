@@ -106,16 +106,16 @@ const EmployeeList = () => {
             {/* header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{forceFilter.toUpperCase()}</h1>
+                    <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{user?.role === "HR" ? "Employees" : forceFilter.toUpperCase()}</h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage your organization's workforce.
                     </p>
                 </div>
 
                 {/* HR / EMPLOYEES TOGGLE BUTTON */}
-                {user.role === "Admin" && <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                {user?.role === "Admin" && <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                     <button
-                        onClick={() => { setForceFilter("hr"); setPage(1); setSearch("") ;}}
+                        onClick={() => { setForceFilter("hr"); setPage(1); setSearch(""); }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "hr"
                             ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                             : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
@@ -124,7 +124,7 @@ const EmployeeList = () => {
                         HR
                     </button>
                     <button
-                        onClick={() => { setForceFilter("employees"); setPage(1); setSearch("") ;}}
+                        onClick={() => { setForceFilter("employees"); setPage(1); setSearch(""); }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "employees"
                             ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                             : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
@@ -133,7 +133,7 @@ const EmployeeList = () => {
                         EMPLOYEE
                     </button>
                     <button
-                        onClick={() => { setForceFilter("admin"); setPage(1); setSearch("") ;}}
+                        onClick={() => { setForceFilter("admin"); setPage(1); setSearch(""); }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "admin"
                             ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                             : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
