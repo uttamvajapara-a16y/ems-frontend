@@ -113,7 +113,7 @@ const EmployeeList = () => {
                 </div>
 
                 {/* HR / EMPLOYEES TOGGLE BUTTON */}
-                <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                {user.role === "Admin" && <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                     <button
                         onClick={() => { setForceFilter("hr"); setPage(1); setSearch("") ;}}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "hr"
@@ -141,7 +141,7 @@ const EmployeeList = () => {
                     >
                         ADMIN
                     </button>
-                </div>
+                </div>}
             </div>
 
             {error && (

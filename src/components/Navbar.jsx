@@ -16,6 +16,7 @@ import {
   X,
   Moon,
   Sun,
+  MessageCircle,
 } from "lucide-react";
 
 const NAV_LINKS = {
@@ -26,6 +27,7 @@ const NAV_LINKS = {
     { to: "/leaves/approve", label: "Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/audit-logs", label: "Audit Logs", icon: FileClock },
+    { to: "/chat", label: "Chat", icon: MessageCircle },
   ],
   hr: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -33,12 +35,14 @@ const NAV_LINKS = {
     { to: "/leaves", label: "My Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/attendance", label: "Attendance", icon: ClipboardList },
+    { to: "/chat", label: "Chat", icon: MessageCircle },
   ],
   employee: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/attendance", label: "My Attendance", icon: ClipboardList },
     { to: "/leaves", label: "My Leaves", icon: Calendar },
     { to: "/payslips", label: "Payslips", icon: Wallet },
+    { to: "/chat", label: "Chat", icon: MessageCircle },
   ],
 };
 

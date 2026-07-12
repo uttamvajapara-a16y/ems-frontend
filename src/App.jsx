@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { ApproveLeave, AttendanceReport, AuditLogsPage, Body, Dashboard, DepartmentForm, Departments, Edit, EmployeeList, GeneratePayroll, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile, RegisterUser } from './components'
+import { ApproveLeave, AttendanceReport, AuditLogsPage, Body, ChatPage, Dashboard, DepartmentForm, Departments, Edit, EmployeeList, GeneratePayroll, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile, RegisterUser } from './components'
 import { Provider } from 'react-redux'
 import store from './utils/appStrore' ;
 
@@ -29,6 +29,7 @@ function App() {
               <Route path="/user/register" element={<RegisterUser />} />
               <Route path="/audit-logs" element={<AuditLogsPage />} />
               <Route path="/edit/:id" element={<Edit />} />
+              <Route path="/chat" element={<ChatPage />} />
               <Route path="*" element={"404 Not Found"} />
             </Route>
           </Routes>

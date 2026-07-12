@@ -19,6 +19,7 @@ import DepartmentForm from "./HR-Admin/DepartmentForm";
 import RegisterUser from "./HR-Admin/RegisterUser" ;
 import AuditLogsPage from "./HR-Admin/AuditLogsPage";
 import Edit from "./HR-Admin/Edit";
+import ChatPage from "./ChatPage";
 
 export {
     Body,
@@ -41,5 +42,6 @@ export {
     DepartmentForm,
     RegisterUser,
     AuditLogsPage,
-    Edit
+    Edit,
+    ChatPage
 }
