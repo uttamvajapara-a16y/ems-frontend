@@ -35,7 +35,7 @@ const GeneratePayroll = () => {
   const [year, setYear] = useState(today.getFullYear());
   const [basicSalary, setBasicSalary] = useState("");
   const [allowances, setAllowances] = useState("");
-  const [departmentName, setDepartmentname] = useState("") ;
+  const [departmentName, setDepartmentname] = useState("");
 
   const [generating, setGenerating] = useState(false);
   const [bulkGenerating, setBulkGenerating] = useState(false);
@@ -55,15 +55,14 @@ const GeneratePayroll = () => {
   const [month2, setMonth2] = useState("");
   const [year2, setYear2] = useState("");
   const [status, setStatus] = useState("");
-  const [role, setRole] = useState("") ;
+  const [role, setRole] = useState("");
 
   const fetchPayrolls = async () => {
     setLoadingList(true);
     try {
-      const dept = user.role === "HR" ? user.departmentName : "" ;
+      const dept = user.role === "HR" ? user.departmentName : "";
       const res = await axiosInstance.get(`/payroll?page=${page}&month=${month2}&year=${year2}&status=${status}&role=${role}&dept=${dept}`);
       const hrRes = await axiosInstance.get("/hr");
-      console.log(res?.data?.data) ;
       setPayrolls(res.data.data);
       setPagination(res.data.pagination);
       setHrData(hrRes.data.data);
@@ -78,7 +77,6 @@ const GeneratePayroll = () => {
     try {
       const roleDept = user?.role === "HR" ? (user?.departmentName) : "";
       const res = await axiosInstance.get(`/employees?department=${roleDept}`);
-      // console.log(res) ;
       setHrEmployees(res.data.data);
     } catch (err) {
       setError(err?.response?.data?.message);
@@ -96,10 +94,10 @@ const GeneratePayroll = () => {
   }, []);
 
   const clearFilters = () => {
-    setMonth2("") ;
-    setYear2("") ;
-    setStatus("") ;
-    setRole("") ;
+    setMonth2("");
+    setYear2("");
+    setStatus("");
+    setRole("");
     setPage(1);
   };
 
@@ -146,13 +144,44 @@ const GeneratePayroll = () => {
     }
   };
 
-  const handleMarkPaid = async (id) => {
+  const handleMarkPaid = async (id, salaryAmt) => {
     setPayingId(id);
     try {
-      await axiosInstance.put(`/payroll/mark-paid/${id}`);
-      setPayrolls((prev) =>
-        prev.map((p) => (p._id === id ? { ...p, status: "paid", paymentDate: new Date() } : p))
-      );
+      // await axiosInstance.put(`/payroll/mark-paid/${id}`);
+      // setPayrolls((prev) =>
+      //   prev.map((p) => (p._id === id ? { ...p, status: "paid", paymentDate: new Date() } : p))
+      // );
+
+
+
+      const options = {
+        key: "rzp_test_VSdp7X3K39GwBK",
+        amount: salaryAmt * 100,
+        currency: "INR",
+        name: "salary payment",
+        description: "Test Transaction",
+        prefill: {
+          name: "abc",
+          email: "abc@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: '#f97316',
+        },
+        handler: async function (response) {
+          await axiosInstance.put(`/payroll/mark-paid/${id}`);
+          setPayrolls((prev) =>
+            prev.map((p) => (p._id === id ? { ...p, status: "paid", paymentDate: new Date() } : p))
+          );
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
+
+
+
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to mark as paid");
     } finally {
@@ -235,7 +264,6 @@ const GeneratePayroll = () => {
                     id="emp"
                     onChange={(e) => {
                       const selectedId = e.target.value;
-                      console.log(selectedId)
                       if (selectedId === "ALL") {
                         setEmployeeId("")
                         setBasicSalary("")
@@ -387,7 +415,7 @@ const GeneratePayroll = () => {
             <option value="failed">failed</option>
           </select>
 
-          {user.role === "Admin" && <select
+          {user?.role === "Admin" && <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
             className="px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
@@ -453,9 +481,22 @@ const GeneratePayroll = () => {
                       </span>
                     </td>
                     <td className="px-6 py-3.5">
+
+
+
+
+
+
+
+
+
+
+
+
+
                       {p.status !== "paid" ? (
                         <button
-                          onClick={() => handleMarkPaid(p._id)}
+                          onClick={() => handleMarkPaid(p._id, p.netSalary)}
                           disabled={payingId === p._id}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-medium border border-green-200 hover:bg-green-100 disabled:opacity-50 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/20 transition-colors"
                         >

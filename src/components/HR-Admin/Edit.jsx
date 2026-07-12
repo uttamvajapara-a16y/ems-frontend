@@ -22,8 +22,6 @@ const Edit = () => {
 
     const [employee, setEmployee] = useState(location.state?.toEdit || null);
     const [loading, setLoading] = useState(!location.state?.toEdit);
-    // console.log("employee first");
-    // console.log(employee) ;
 
     const userData = {
         firstName: employee?.firstName || "" ,
@@ -44,8 +42,6 @@ const Edit = () => {
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
-    // console.log(formData) ;
 
     const [previewImage, setPreviewImage] = useState(employee?.profileImage || "");
 
@@ -80,8 +76,6 @@ const Edit = () => {
         setFormData(originalData);
         setIsChanged(false);
     };
-
-    // console.log(employee)
 
     useEffect(() => {
         if (!employee) {
@@ -124,8 +118,6 @@ const Edit = () => {
             setLoading(false);
         }
     }, [employee]);
-
-    // console.log("employee after useEffect");
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">

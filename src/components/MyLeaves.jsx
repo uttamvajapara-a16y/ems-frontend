@@ -37,9 +37,7 @@ const MyLeaves = () => {
         setError("");
         try {
             const res = await axiosInstance.get(`/leave/my-leaves?month=${month}&year=${year}`);
-            // console.log(res);
             setRecords(res.data.data);
-            // console.log(res.data.data) ;
             setSummary(res.data.summary);
         } catch (err) {
             setError(err?.response?.data?.message || "Failed to load leaves");
@@ -52,7 +50,6 @@ const MyLeaves = () => {
         setLoading(true);
         try{
             const res = await axiosInstance.post("/leave/cancle" , {id}) ;
-            // console.log(res)
             fetchLeaves() ;
         } catch (err) {
             setError(err?.response?.data?.message || "Failed to delete leave");

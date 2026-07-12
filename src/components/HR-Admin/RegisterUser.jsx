@@ -28,7 +28,6 @@ const RegisterUser = () => {
             setFetchingDepts(true);
             const res = await axiosInstance.get("/department/get/all");
             setDepartments(res.data.data);
-            // console.log(res.data.data)
         } catch (err) {
             setError(err?.response?.data?.message || "error in fetching departments");
         } finally {
@@ -49,7 +48,6 @@ const RegisterUser = () => {
             dateOfJoining,
             salary
         }
-        // console.log(userData)
         try {
             setloading(true);
             const res = await axiosInstance.post("/register", userData);

@@ -40,7 +40,6 @@ const ChatPage = () => {
         try {
             const res = await axiosInstance.get("/chat/contacts");
             setContactGroups(res.data.data);
-            // console.log(res.data.data) ;
         } catch (err) {
             console.error("Failed to load contacts:", err.message);
         } finally {

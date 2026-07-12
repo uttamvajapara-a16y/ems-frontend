@@ -22,7 +22,6 @@ const LeaveForm = () => {
             navigate("/leaves")
         } catch (err){
             setError(err?.response?.data?.message || "sonthing went wrong") ;
-            console.log("Error in applying leave" + err.message) ;
         } finally {
             setLoading(false) ;
         }

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from './Navbar'
@@ -13,14 +13,11 @@ const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const fetchUser = async () => {
-    if (user) {
-      navigate("/dashboard")
-      return
-    };
     try {
       const res = await axiosInstance.get("/profile/view");
-      // console.log(res) ;
       dispatch(addUser(res.data));
     } catch (err) {
       if (err.response?.status === 401) {
@@ -31,8 +28,14 @@ const Body = () => {
   }
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (user) {
+      if (location.pathname === "/" || location.pathname === "/login") {
+        navigate("/dashboard");
+      }
+    } else {
+      fetchUser();
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">

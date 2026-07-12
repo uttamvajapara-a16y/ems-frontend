@@ -56,7 +56,6 @@ const MainDashboard = () => {
             await fetchStatsAttendence();
         } catch (err) {
             setError(err?.response?.data?.message || "Check-in failed");
-            console.log(err)
         } finally {
             setCheckLoading(false);
         }

@@ -13,7 +13,6 @@ const Departments = () => {
         try {
             const res = await axiosInstance.get("/department/get/all");
             setDepartments(res.data.data);
-            // console.log(res.data.data)
         } catch (err) {
             setError(err.response.data.message || "Failed to fetch departments")
         } finally {

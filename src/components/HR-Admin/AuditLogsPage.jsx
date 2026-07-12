@@ -53,7 +53,6 @@ const AuditLogPage = () => {
 
       const res = await axiosInstance.get(`/admin/auditLog${query}`);
       setLogs(res.data.data || []);
-      // console.log(res.data.data)
       setPagination(res.data.pagination);
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load audit logs");

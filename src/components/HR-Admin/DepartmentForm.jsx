@@ -23,7 +23,6 @@ const DepartmentForm = () => {
             navigate("/departments")
         } catch (err){
             setError(err?.response?.data?.message) ;
-            console.log("Error in applying leave" + err.message) ;
         } finally {
             setLoading(false) ;
         }
