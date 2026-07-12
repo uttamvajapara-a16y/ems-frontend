@@ -23,6 +23,8 @@ const actionConfig = {
   REJECT: { icon: XCircle, color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20" },
   LOGIN: { icon: LogIn, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/20" },
   LOGOUT: { icon: LogOut, color: "text-slate-500 dark:text-slate-400", bg: "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700" },
+  "CHECK IN": { icon: LogIn, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/20" },
+  "CHECK OUT": { icon: LogOut, color: "text-slate-500 dark:text-slate-400", bg: "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700" },
 };
 
 const targetTypes = ["Employee", "Department", "Attendance", "Leave", "Payroll", "User"];
@@ -51,6 +53,7 @@ const AuditLogPage = () => {
 
       const res = await axiosInstance.get(`/admin/auditLog${query}`);
       setLogs(res.data.data || []);
+      // console.log(res.data.data)
       setPagination(res.data.pagination);
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load audit logs");
@@ -161,10 +164,10 @@ const AuditLogPage = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-800 dark:text-slate-200">
                       <span className="font-semibold">
-                        {log.userId?.firstName} {log.userId?.lastName}
+                        {log.userId?.firstName} {log.userId?.lastName}({log.userId?.role})
                       </span>{" "}
                       <span className="text-slate-500 dark:text-slate-400">
-                        {log.action?.toLowerCase()}d a{" "}
+                        {log.action?.toLowerCase()} - {" "}
                       </span>
                       <span className="font-medium">{log.targetType}</span>
                     </p>
