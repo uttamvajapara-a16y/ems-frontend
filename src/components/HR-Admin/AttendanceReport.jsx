@@ -25,6 +25,8 @@ const statusBadge = {
 
 const AttendanceReport = () => {
     const user = useSelector((store) => store.user);
+    const dept = useSelector((store) => store.department);
+
     const [filterMode, setFilterMode] = useState("today");
     const today = new Date();
     const [selectedDate, setSelectedDate] = useState(today.toISOString().split("T")[0]);
@@ -35,8 +37,6 @@ const AttendanceReport = () => {
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
-    const [deptData, setDeptData] = useState([]);
 
     const fetchReport = async () => {
         setLoading(true);
@@ -63,18 +63,6 @@ const AttendanceReport = () => {
     useEffect(() => {
         fetchReport();
     }, [filterMode, selectedDate, selectedMonth, selectedYear, department]);
-
-    useEffect(() => {
-        const fetchDepartments = async () => {
-            try {
-                const res = await axiosInstance.get("/department/get/all");
-                setDeptData(res.data.data);
-            } catch (err) {
-                console.error("Failed to fetch departments:", err.message);
-            }
-        };
-        fetchDepartments();
-    }, []);
 
     const summary = {
         present: records.filter((r) => r.status === "present").length,
@@ -176,7 +164,7 @@ const AttendanceReport = () => {
                         className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow lg:ml-auto"
                     >
                         <option value="">All Departments</option>
-                        {deptData?.map((dept) => (<option key={dept._id} value={dept.departmentName}>{dept.departmentName}</option>))}
+                        {dept?.map((dept) => (<option key={dept._id} value={dept.departmentName}>{dept.departmentName}</option>))}
                     </select>}
                 </div>
             </div>

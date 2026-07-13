@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const RegisterUser = () => {
+
+    const departments = useSelector((store) => store.department);
 
     const [error, setError] = useState("");
     const [loading, setloading] = useState(false);
@@ -19,21 +22,7 @@ const RegisterUser = () => {
     const [dateOfJoining, setDateOfJoining] = useState("");
     const [salary, setSalary] = useState("");
 
-    const [departments, setDepartments] = useState([]);
-
     const navigate = useNavigate();
-
-    const fetchDepartments = async () => {
-        try {
-            setFetchingDepts(true);
-            const res = await axiosInstance.get("/department/get/all");
-            setDepartments(res.data.data);
-        } catch (err) {
-            setError(err?.response?.data?.message || "error in fetching departments");
-        } finally {
-            setFetchingDepts(false);
-        }
-    }
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -59,9 +48,9 @@ const RegisterUser = () => {
         }
     }
 
-    useEffect(() => {
-        fetchDepartments();
-    }, [])
+    // useEffect(() => {
+    //     fetchDepartments();
+    // }, [])
 
     return (
         <div className="min-h-[calc(100vh-14rem)] max-w-5xl mx-auto flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">

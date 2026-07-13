@@ -6,6 +6,7 @@ import Footer from './Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import axiosInstance from '../utils/axiosInstance'
 import { addUser } from '../utils/userSlice'
+import { addDept } from '../utils/deptSlice'
 
 const Body = () => {
 
@@ -18,7 +19,9 @@ const Body = () => {
   const fetchUser = async () => {
     try {
       const res = await axiosInstance.get("/profile/view");
+      const res1 = await axiosInstance.get("/department/get/all");
       dispatch(addUser(res.data));
+      dispatch(addDept(res1.data.data)) ;
     } catch (err) {
       if (err.response?.status === 401) {
         navigate("/login");

@@ -1,28 +1,16 @@
 import { useEffect, useState } from 'react'
 import React from 'react'
 import axiosInstance from '../../utils/axiosInstance';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Departments = () => {
-    const [departments, setDepartments] = useState([]);
-    const [loading, setLoading] = useState(true);
+
+    const departments = useSelector((store) => store.department);
+
     const [error, setError] = useState("");
 
-    const fetDepartments = async () => {
-        try {
-            const res = await axiosInstance.get("/department/get/all");
-            setDepartments(res.data.data);
-        } catch (err) {
-            setError(err.response.data.message || "Failed to fetch departments")
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetDepartments();
-    }, [])
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
             {error && (
@@ -41,11 +29,7 @@ const Departments = () => {
             </div>
 
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-                {loading ? (
-                    <div className="min-h-75 flex items-center justify-center">
-                        <Loader2 className="animate-spin text-indigo-500" size={28} />
-                    </div>
-                ) : departments.length === 0 ? (
+                {departments.length === 0 ? (
                     <div className="text-center py-16">
                         <Users className="mx-auto text-slate-300 dark:text-slate-700 mb-3" size={36} />
                         <p className="text-sm text-slate-400 dark:text-slate-500">No departments records found</p>

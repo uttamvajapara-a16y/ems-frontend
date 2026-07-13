@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+ 
 const EmployeeList = () => {
     const user = useSelector((store) => store.user);
+    const dept = useSelector((store) => store.department) ;
     const useDebounce = (value, delay = 800) => {
         const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -39,8 +40,6 @@ const EmployeeList = () => {
     const [attendanceFilter, setAttendanceFilter] = useState(""); // "present" | "absent" | ""
     const [forceFilter, setForceFilter] = useState("hr"); // "present" | "absent" | ""
     const [page, setPage] = useState(1);
-
-    const [deptData, setDeptData] = useState([]);
 
     const fetchEmployees = async () => {
         setLoading(true);
@@ -70,18 +69,6 @@ const EmployeeList = () => {
         if (!user) return;
         fetchEmployees();
     }, [page, debouncedSearch, department, status, attendanceFilter, user, forceFilter]);
-
-    useEffect(() => {
-        const fetchDepartments = async () => {
-            try {
-                const res = await axiosInstance.get("/department/get/all");
-                setDeptData(res.data.data);
-            } catch (err) {
-                console.error("Failed to fetch departments:", err.message);
-            }
-        };
-        fetchDepartments();
-    }, []);
 
     const attendanceStyles = {
         present: {
@@ -172,7 +159,7 @@ const EmployeeList = () => {
                         className="px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                     >
                         <option value="">All Departments</option>
-                        {deptData?.map((d) => (
+                        {dept?.map((d) => (
                             <option key={d._id} value={d.departmentName}>{d.departmentName}</option>
                         ))}
                         {/* TODO: map real departments here, e.g. departments.map(d => <option key={d._id} value={d._id}>{d.name}</option>) */}
