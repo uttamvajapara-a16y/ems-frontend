@@ -1,41 +1,74 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react' ;
-import axiosInstance from '../../utils/axiosInstance' ;
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../../utils/axiosInstance';
 import React from 'react'
 import { Loader2 } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addDept, updateDept } from '../../utils/deptSlice';
 
 const DepartmentForm = () => {
-    const [error , setError] = useState("") ;
-    const [loading , setLoading] = useState(false) ;
 
-    const [departmentName , setDepartmentName] = useState("") ;
-    const [description , setDescription] = useState("") ;
-    const [headName , setHeadName] = useState("") ;
+    const dept = useSelector((store) => store.department);
+    const dispatch = useDispatch() ;
 
-    const navigate = useNavigate() ;
+    const location = useLocation();
+    const [toUpdateDept, setToUpdateDept] = useState(location.state?.toEdit || null);
 
-    const handleCreateDepartment = async (e) => {
-        e.preventDefault() ;
-        setError("") ;
-        setLoading(true) ;
-        try{
-            const res = await axiosInstance.post("/department/create" , {departmentName , description , headName }) ;
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const [departmentName, setDepartmentName] = useState("");
+    const [description, setDescription] = useState("");
+    const [headName, setHeadName] = useState("");
+
+    useEffect(() => {
+        if (toUpdateDept) {
+            setDepartmentName(toUpdateDept.departmentName || "");
+            setDescription(toUpdateDept.description || "");
+            setHeadName(toUpdateDept.headName || "");
+        }
+    }, []);
+
+    const navigate = useNavigate();
+
+    const handleUpdateDepartment = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+        try {
+            // const res = await axiosInstance.put(`/department/update/${toUpdateDept._id}`, { departmentName, description, headName });
+            dispatch(updateDept({_id: toUpdateDept._id, departmentName, description, headName}))
             navigate("/departments")
-        } catch (err){
-            setError(err?.response?.data?.message) ;
+        } catch (err) {
+            setError(err?.response?.data?.message);
         } finally {
-            setLoading(false) ;
+            setLoading(false);
         }
     }
-  return (
-    <div className="min-h-[calc(100vh-14rem)] flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
+
+    const handleCreateDepartment = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+        try {
+            const res = await axiosInstance.post("/department/create", { departmentName, description, headName });
+            dispatch(addDept([...dept, {_id: res.data.data._id , departmentName, description, headName}])) ;
+            navigate("/departments")
+        } catch (err) {
+            setError(err?.response?.data?.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+    return (
+        <div className="min-h-[calc(100vh-14rem)] flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
             <form
                 className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 p-8"
-                onSubmit={handleCreateDepartment}
+                onSubmit={toUpdateDept === null ? handleCreateDepartment : handleUpdateDepartment}
             >
                 <div className="text-center mb-8">
                     <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Department</h1>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Create Department</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{toUpdateDept === null ? "Create" : "Update"} Department</p>
                 </div>
 
                 {error && (
@@ -43,7 +76,6 @@ const DepartmentForm = () => {
                         {error}
                     </div>
                 )}
-
 
                 <div className="mb-4">
                     <label
@@ -101,16 +133,19 @@ const DepartmentForm = () => {
                         loading ? (
                             <>
                                 <Loader2 size={16} className="animate-spin" />
-                                Creating...
+                                {toUpdateDept === null ? "Creating..." : "Updating..."}
+
                             </>
                         ) : (
-                            "Create"
+                            <>
+                                {toUpdateDept === null ? "Create" : "Update"}
+                            </>
                         )
                     }
                 </button>
             </form>
         </div >
-  )
+    )
 }
 
 export default DepartmentForm

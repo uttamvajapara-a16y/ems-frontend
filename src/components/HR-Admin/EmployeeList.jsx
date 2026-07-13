@@ -231,6 +231,8 @@ const EmployeeList = () => {
                                     <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                                         Employment
                                     </th>
+                                    <th className="px-6 py-3.5 font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -280,7 +282,10 @@ const EmployeeList = () => {
                                                     <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                                                         {emp.status}
                                                     </span>
-                                                    <button
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button
                                                         disabled={user?.role === "HR"}
                                                         onClick={() => handleDeleteEmp(emp._id)}
                                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 ml-3 rounded-lg bg-red-50 text-red-600 text-xs font-medium border border-red-200 hover:bg-red-100 active:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-1 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20 transition-colors duration-150"
@@ -294,7 +299,6 @@ const EmployeeList = () => {
                                                     >
                                                         Edit
                                                     </Link>
-                                                </span>
                                             </td>
                                         </tr>
                                     );

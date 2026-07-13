@@ -147,13 +147,6 @@ const GeneratePayroll = () => {
   const handleMarkPaid = async (id, salaryAmt) => {
     setPayingId(id);
     try {
-      // await axiosInstance.put(`/payroll/mark-paid/${id}`);
-      // setPayrolls((prev) =>
-      //   prev.map((p) => (p._id === id ? { ...p, status: "paid", paymentDate: new Date() } : p))
-      // );
-
-
-
       const options = {
         key: "rzp_test_VSdp7X3K39GwBK",
         amount: salaryAmt * 100,
@@ -178,10 +171,6 @@ const GeneratePayroll = () => {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-
-
-
-
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to mark as paid");
     } finally {

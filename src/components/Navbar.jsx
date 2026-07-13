@@ -32,6 +32,7 @@ const NAV_LINKS = {
   hr: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/employees", label: "Employees", icon: Users },
+    { to: "/departments", label: "Departments", icon: Building2 },
     { to: "/leaves", label: "My Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
     { to: "/attendance", label: "Attendance", icon: ClipboardList },
@@ -39,6 +40,7 @@ const NAV_LINKS = {
   ],
   employee: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/departments", label: "Departments", icon: Building2 },
     { to: "/attendance", label: "My Attendance", icon: ClipboardList },
     { to: "/leaves", label: "My Leaves", icon: Calendar },
     { to: "/payslips", label: "Payslips", icon: Wallet },
