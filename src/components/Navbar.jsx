@@ -95,7 +95,7 @@ const Navbar = () => {
           </Link>
 
           {/* desktop links */}
-          <div className="hidden md:flex items-center gap-1 flex-1 justify-center overflow-x-auto">
+          <div className="hidden md:flex items-center gap-1 flex-1 justify-center overflow-x-auto chat-container">
             {links.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}

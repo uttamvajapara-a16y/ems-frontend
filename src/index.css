@@ -34,3 +34,16 @@ body {
   color: var(--text-primary);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
