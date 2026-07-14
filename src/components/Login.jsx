@@ -94,6 +94,7 @@ const Login = () => {
                         onChange={(e) => setRole(e.target.value)}
                         className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                     >
+                        <option value="">Select Role</option>
                         <option value="Employee">Employee</option>
                         <option value="Admin">Admin</option>
                         <option value="HR">HR</option>

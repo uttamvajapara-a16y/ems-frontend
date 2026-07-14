@@ -1,6 +1,5 @@
 import { useState, lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-// import { ApproveLeave, AttendanceReport, AuditLogsPage, Body, ChatPage, Dashboard, DepartmentForm, Departments, Edit, EmployeeList, GeneratePayroll, LeaveForm, Login, MyAttendance, MyLeaves, Payslips, Profile, RegisterUser } from './components'
 
 const ApproveLeave = lazy(() => import("./components/HR-Admin/ApproveLeave")) ;
 const AttendanceReport = lazy(() => import("./components/HR-Admin/AttendanceReport")) ;

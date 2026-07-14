@@ -19,11 +19,9 @@ const Body = () => {
   const fetchUser = async () => {
     try {
       const res = await axiosInstance.get("/profile/view");
-      // const res1 = await axiosInstance.get("/department/get/all");
       dispatch(addUser(res.data));
-      // dispatch(addDept(res1.data.data)) ;
     } catch (err) {
-      if (err.response?.status === 401) {
+      if (err.response?.status === 400) {
         navigate("/login");
       }
       console.log("error in fetching user data: " + err.message);
