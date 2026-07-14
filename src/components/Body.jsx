@@ -21,7 +21,7 @@ const Body = () => {
       const res = await axiosInstance.get("/profile/view");
       dispatch(addUser(res.data));
     } catch (err) {
-      if (err.response?.status === 400) {
+      if (err.response?.status === 401) {
         navigate("/login");
       }
       console.log("error in fetching user data: " + err.message);
