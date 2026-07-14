@@ -43,6 +43,7 @@ const EmployeeList = () => {
 
     const fetchEmployees = async () => {
         setLoading(true);
+        setError("") ;
         try {
             const res = await axiosInstance.get(`/${forceFilter}?page=${page}&search=${debouncedSearch}&department=${department}&status=${status}&attendance=${attendanceFilter}`)
             setEmployees(res?.data?.data);
@@ -56,8 +57,10 @@ const EmployeeList = () => {
 
     const handleDeleteEmp = async (id) => {
         setLoading(true);
+        setError("") ;
         try {
-            await axiosInstance.delete(`/employee/delete/${id}`)
+            await axiosInstance.delete(`/${forceFilter}/delete/${id}`)
+            fetchEmployees();
         } catch (err) {
             setError(err?.response?.data?.message || "error in deleting Employee")
         } finally {
@@ -287,7 +290,7 @@ const EmployeeList = () => {
                                             <td>
                                                 <button
                                                         disabled={user?.role === "HR"}
-                                                        onClick={() => handleDeleteEmp(emp._id)}
+                                                        onClick={() => {handleDeleteEmp(emp._id); fetchEmployees();}}
                                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 ml-3 rounded-lg bg-red-50 text-red-600 text-xs font-medium border border-red-200 hover:bg-red-100 active:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-1 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20 transition-colors duration-150"
                                                     >
                                                         delete

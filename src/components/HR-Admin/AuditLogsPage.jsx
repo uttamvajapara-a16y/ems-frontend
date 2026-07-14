@@ -72,6 +72,18 @@ const AuditLogPage = () => {
     setPage(1);
   };
 
+  const deleteLogs = async () => {
+    try{
+      setLoading(true) ;
+      const res = await axiosInstance.delete(`/admin/auditLog/delete`) ;
+      fetchLogs() ;
+    } catch (err) {
+      setError(err?.response?.data?.message || "falied to delete logs") ;
+    } finally{
+      setLoading(false) ;
+    }
+  }
+
   const hasActiveFilters = date || action || targetType;
 
   return (
@@ -134,6 +146,12 @@ const AuditLogPage = () => {
               Clear filters
             </button>
           )}
+          <button
+              onClick={deleteLogs}
+              className="text-sm text-red-600 dark:text-red-400 hover:underline lg:ml-auto"
+            >
+              Delete All logs
+            </button>
         </div>
       </div>
 

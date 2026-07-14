@@ -36,7 +36,7 @@ const DepartmentForm = () => {
         setError("");
         setLoading(true);
         try {
-            // const res = await axiosInstance.put(`/department/update/${toUpdateDept._id}`, { departmentName, description, headName });
+            const res = await axiosInstance.put(`/department/update/${toUpdateDept._id}`, { departmentName, description, headName });
             dispatch(updateDept({_id: toUpdateDept._id, departmentName, description, headName}))
             navigate("/departments")
         } catch (err) {

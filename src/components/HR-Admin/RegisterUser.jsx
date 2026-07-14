@@ -26,6 +26,7 @@ const RegisterUser = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        const departmentId = departments.find((d) => d.departmentName === departmentName)._id;
         const userData = {
             firstName,
             lastName,
@@ -33,10 +34,12 @@ const RegisterUser = () => {
             password,
             role,
             departmentName,
+            departmentId,
             designation,
             dateOfJoining,
             salary
         }
+        console.log(userData) ;
         try {
             setloading(true);
             const res = await axiosInstance.post("/register", userData);

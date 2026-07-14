@@ -88,13 +88,15 @@ const ChatPage = () => {
             senderModel,
             receiverModel,
             text,
+            createdAt
         }) => {
             setMessages((messages) => [...messages, {
                 senderId,
                 receiverId,
                 senderModel,
                 receiverModel,
-                text
+                text,
+                createdAt
             }])
         })
 

@@ -110,7 +110,7 @@ const Edit = () => {
                 status: employee?.status || "",
                 dateOfJoining: employee?.dateOfJoining || "",
                 salary: employee?.salary || "",
-                role: employee?.role
+                role: employee?.role || ""
             }
             setFormData(data);
             setOriginalData(data);
