@@ -5,11 +5,9 @@ import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    // const [emailId, setEmailId] = useState("uttam@gmail.com");
-    const [emailId, setEmailId] = useState("admin2@gmail.com");
-    // const [password, setPassword] = useState("Uttam@124");  
-    const [password, setPassword] = useState("Admin2@124");
-    const [role, setRole] = useState("Admin");
+    const [emailId, setEmailId] = useState(""); 
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 

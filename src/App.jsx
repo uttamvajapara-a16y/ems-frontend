@@ -20,6 +20,7 @@ const MyLeaves = lazy(() => import("./components/MyLeaves")) ;
 const Payslips = lazy(() => import("./components/Payslips")) ;
 const Profile = lazy(() => import("./components/Profile")) ;
 const RegisterUser = lazy(() => import("./components/HR-Admin/RegisterUser")) ;
+const PasswordChange = lazy(() => import("./components/PasswordChange")) ;
 
 
 import { Provider } from 'react-redux'
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/audit-logs" element={<AuditLogsPage />} />
                 <Route path="/edit/:id" element={<Edit />} />
                 <Route path="/chat" element={<ChatPage />} />
+                <Route path="/profile/changePassword" element={<PasswordChange />}/>
                 <Route path="*" element={"404 Not Found"} />
               </Route>
             </Routes>

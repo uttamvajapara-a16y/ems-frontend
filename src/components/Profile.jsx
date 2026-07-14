@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { addUser } from "../utils/userSlice";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
     const user = useSelector((store) => store.user);
@@ -141,6 +142,12 @@ const Profile = () => {
                             {user?.role}
                         </span>
                     </div>
+                    <Link
+                        to={"/profile/changePassword"}
+                        className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline lg:ml-auto"
+                    >
+                        Change Password
+                    </Link>
                 </div>
 
                 {/* --- form fields --- */}
