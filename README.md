@@ -116,5 +116,3 @@ Since this is a single-page app, refreshing a page like `/dashboard` will 404 un
   ]
 }
 ```
-
-**On Render (static site)**, add a rewrite rule in settings: `/*` → `/index.html`.
