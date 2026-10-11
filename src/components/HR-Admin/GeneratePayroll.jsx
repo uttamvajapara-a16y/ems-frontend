@@ -242,7 +242,7 @@ const GeneratePayroll = () => {
               >
                 For HR
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setTarget("manager")}
                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${target === "manager"
@@ -251,7 +251,7 @@ const GeneratePayroll = () => {
                   }`}
               >
                 For Manager
-              </button>
+              </button> */}
             </div>
           )}
         </div>

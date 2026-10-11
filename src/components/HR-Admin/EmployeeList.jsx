@@ -62,7 +62,7 @@ const EmployeeList = () => {
             await axiosInstance.delete(`/${forceFilter}/delete/${id}`)
             fetchEmployees();
         } catch (err) {
-            setError(err?.response?.data?.message || "error in deleting Employee")
+            setError(err?.response?.data?.message || `error in deleting ${forceFilter}`)
         } finally {
             setLoading(false);
         }
@@ -122,7 +122,7 @@ const EmployeeList = () => {
                     >
                         EMPLOYEE
                     </button>
-                    <button
+                    {/* <button
                         onClick={() => { setEmployees([]); setForceFilter("manager"); setPage(1); setSearch(""); }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "manager"
                             ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
@@ -130,7 +130,7 @@ const EmployeeList = () => {
                             }`}
                     >
                         MANAGER
-                    </button>
+                    </button> */}
                     <button
                         onClick={() => { setEmployees([]); setForceFilter("admin"); setPage(1); setSearch(""); }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "admin"
