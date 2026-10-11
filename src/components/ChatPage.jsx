@@ -22,6 +22,7 @@ const ChatPage = () => {
     const currentUser = useSelector((store) => store.user);
 
     const [contactGroups, setContactGroups] = useState({});
+    const [totalWorkForce, setTotalWorkForce] = useState(0);
     const [loadingContacts, setLoadingContacts] = useState(true);
     const [search, setSearch] = useState("");
 
@@ -40,6 +41,7 @@ const ChatPage = () => {
         try {
             const res = await axiosInstance.get("/chat/contacts");
             setContactGroups(res.data.data);
+            setTotalWorkForce(res.data.count) ;
         } catch (err) {
             console.error("Failed to load contacts:", err.message);
         } finally {
@@ -150,7 +152,11 @@ const ChatPage = () => {
                 {/* LEFT PANE - directory */}
                 <div className={`w-full sm:w-80 shrink-0 border-r border-slate-200 dark:border-slate-800 flex flex-col ${selectedContact ? "hidden sm:flex" : "flex"}`}>
                     <div className="p-4 border-b border-slate-100 dark:border-slate-800">
-                        <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-3">Team Chat</h2>
+                        {/* <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-3">Team Chat</h2> */}
+                        <div className="flex gap-18 align-center justify-center">
+                            <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-3">Team Chat</h2>
+                            <h2 className="text-sm font-sm text-slate-400 dark:text-white mb-3">Total Workforce : {totalWorkForce}</h2>
+                        </div>
                         <div className="relative">
                             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input

@@ -49,7 +49,7 @@ const EmployeeList = () => {
             setEmployees(res?.data?.data);
             setPagination(res?.data?.pagination);
         } catch (err) {
-            setError(err?.response?.data?.message || `Failed to fetch ${forceFilter}`)
+            setError(err?.response?.data?.message || `Failed to fetch ${forceFilter}`) ;
         } finally {
             setLoading(false);
         }
@@ -121,6 +121,15 @@ const EmployeeList = () => {
                             }`}
                     >
                         EMPLOYEE
+                    </button>
+                    <button
+                        onClick={() => { setForceFilter("manager"); setPage(1); setSearch(""); }}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${forceFilter === "manager"
+                            ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                            : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                            }`}
+                    >
+                        MANAGER
                     </button>
                     <button
                         onClick={() => { setForceFilter("admin"); setPage(1); setSearch(""); }}

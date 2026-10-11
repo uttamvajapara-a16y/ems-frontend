@@ -49,6 +49,7 @@ const GeneratePayroll = () => {
   const [hrEmployees, setHrEmployees] = useState([]);
   const [loadingEmp, setLoadingEmp] = useState(true);
   const [hrData, setHrData] = useState([]);
+  const [managerData, setManagerData] = useState([]);
 
   const [pagination, setPagination] = useState(null);
   const [page, setPage] = useState(1);
@@ -85,12 +86,24 @@ const GeneratePayroll = () => {
     }
   }
 
+  const fetchManagers = async () => {
+    try {
+      const res = await axiosInstance.get(`/managers/getAllManagers`);
+      setManagerData(res.data.data);
+    } catch (err) {
+      setError(err?.response?.data?.message);
+    } finally {
+      setLoadingEmp(false);
+    }
+  }
+
   useEffect(() => {
     fetchPayrolls();
   }, [page, month2, year2, status, role]);
 
   useEffect(() => {
     fetchHrEmployees();
+    fetchManagers() ;
   }, []);
 
   const clearFilters = () => {
@@ -208,11 +221,11 @@ const GeneratePayroll = () => {
 
           {/* only Admin can toggle target between Employee/HR */}
           {isAdmin && (
-            <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+            <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-lg p-1" onClick={() => setBasicSalary("") }>
               <button
                 type="button"
                 onClick={() => setTarget("employee")}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${target === "employee"
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${target === "employee"
                   ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                   : "text-slate-500 dark:text-slate-400"
                   }`}
@@ -222,12 +235,22 @@ const GeneratePayroll = () => {
               <button
                 type="button"
                 onClick={() => setTarget("hr")}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${target === "hr"
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${target === "hr"
                   ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                   : "text-slate-500 dark:text-slate-400"
                   }`}
               >
                 For HR
+              </button>
+              <button
+                type="button"
+                onClick={() => setTarget("manager")}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${target === "manager"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                  : "text-slate-500 dark:text-slate-400"
+                  }`}
+              >
+                For Manager
               </button>
             </div>
           )}
@@ -236,7 +259,9 @@ const GeneratePayroll = () => {
         <form onSubmit={handleGenerate} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-              {target === "hr" ? "HR Employee" : "Employee"}
+              {
+                target == "hr" ? ("HR Employee") : target == "employee" ? ("Employee") : ("Managers")
+              }
             </label>
             <div className="relative">
               <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -258,7 +283,7 @@ const GeneratePayroll = () => {
                         setBasicSalary("")
                         return;
                       }
-                      const selectedEmp = target === "hr" ? hrData.find((emp) => emp._id === selectedId) : hrEmployees.find((emp) => emp._id === selectedId);
+                      const selectedEmp = target === "hr" ? hrData.find((emp) => emp._id === selectedId) : target === "employee" ? hrEmployees.find((emp) => emp._id === selectedId) : managerData.find((emp) => emp._id === selectedId);
                       if (selectedEmp) {
                         setBasicSalary(selectedEmp.salary);
                         setEmployeeId(selectedEmp._id);
@@ -276,7 +301,18 @@ const GeneratePayroll = () => {
                           </option>
                         ))}
                       </>
-                    ) : (
+                    ) 
+                    : target == "manager" ? (
+                      <>
+                        <option value="ALL">ALL MANAGERS</option>
+                        {managerData.map((emp) => (
+                          <option key={emp._id} value={emp._id}>
+                            {emp.firstName} {emp.lastName}
+                          </option>
+                        ))}
+                      </>
+                    ) 
+                    : (
                       <>
                         <option value="ALL">ALL EMPLOYEES</option>
                         {hrEmployees.map((emp) => (
@@ -324,7 +360,6 @@ const GeneratePayroll = () => {
               value={basicSalary}
               disabled
               onChange={(e) => setBasicSalary(e.target.value)}
-              placeholder="50000"
               required
               min="0"
               className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
@@ -339,7 +374,6 @@ const GeneratePayroll = () => {
               type="number"
               value={allowances}
               onChange={(e) => setAllowances(e.target.value)}
-              placeholder="5000"
               min="0"
               className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
             />
@@ -470,19 +504,6 @@ const GeneratePayroll = () => {
                       </span>
                     </td>
                     <td className="px-6 py-3.5">
-
-
-
-
-
-
-
-
-
-
-
-
-
                       {p.status !== "paid" ? (
                         <button
                           onClick={() => handleMarkPaid(p._id, p.netSalary)}

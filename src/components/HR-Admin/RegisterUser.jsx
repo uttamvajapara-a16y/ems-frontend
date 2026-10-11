@@ -51,10 +51,6 @@ const RegisterUser = () => {
         }
     }
 
-    // useEffect(() => {
-    //     fetchDepartments();
-    // }, [])
-
     return (
         <div className="min-h-[calc(100vh-14rem)] max-w-5xl mx-auto flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
             <form
@@ -146,6 +142,7 @@ const RegisterUser = () => {
                             <option value="Admin">Admin</option>
                             <option value="HR">HR</option>
                             <option value="Employee">Employee</option>
+                            <option value="Manager">Manager</option>
                         </select>
                     </div>
 
@@ -178,10 +175,27 @@ const RegisterUser = () => {
                             onChange={(e) => setDesignation(e.target.value)}
                             className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                         >
-                            <option value="">ALL Designation</option>
-                            <option value="jr.developer">jr.developer</option>
-                            <option value="sr.developer">sr.developer</option>
-                            <option value="teamleader">teamleader</option>
+                            <option key={1} value="">ALL Designation</option>
+                            <option key={2} value="jr.developer">jr.developer</option>
+                            <option key={3} value="sr.developer">sr.developer</option>
+                            <option key={4} value="teamleader">teamleader</option>
+                        </select>
+                        </div>
+                    </div>}
+
+                    {role === "Manager" && <div className="mb-4">
+                        <label
+                            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
+                        >Designation </label>
+                        <div className="relative">
+                            <select
+                            value={designation}
+                            onChange={(e) => setDesignation(e.target.value)}
+                            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                        >
+                            <option key={1} value="">ALL Designation</option>
+                            <option key={2} value="jr.manager">jr.manager</option>
+                            <option key={3} value="sr.manager">sr.manager</option>
                         </select>
                         </div>
                     </div>}

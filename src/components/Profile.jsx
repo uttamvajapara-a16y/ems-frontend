@@ -177,7 +177,8 @@ const Profile = () => {
                             <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type="email"
-                                defaultValue={user?.emailId}
+                                value={formData.emailId}
+                                onChange={(e) => handleChange("emailId", e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
                             />
                         </div>

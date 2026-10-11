@@ -40,7 +40,7 @@ function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path="/attendance" element={<MyAttendance />} />
-                <Route path="/attendance/report" element={<AttendanceReport />} />
+                <Route path="/attendance-report" element={<AttendanceReport />} />
                 <Route path="/leaves" element={<MyLeaves />} />
                 <Route path="/leaves/apply" element={<LeaveForm />} />
                 <Route path="/payslips" element={<Payslips />} />

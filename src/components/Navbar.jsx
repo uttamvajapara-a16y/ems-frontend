@@ -22,7 +22,7 @@ import {
 const NAV_LINKS = {
   admin: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/employees", label: "Employees/HR", icon: Users },
+    { to: "/employees", label: "Workforce", icon: Users },
     { to: "/departments", label: "Departments", icon: Building2 },
     { to: "/leaves/approve", label: "Leaves", icon: Calendar },
     { to: "/payslips", label: "Payroll", icon: Wallet },
